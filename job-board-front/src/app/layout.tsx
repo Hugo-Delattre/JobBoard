@@ -1,8 +1,10 @@
 import "./globals.scss";
 import type { Metadata } from "next";
+import { CacheProvider } from "@chakra-ui/next-js";
+import { ChakraProvider } from "@chakra-ui/react";
 import { Inter } from "next/font/google";
 import NavBar from "./components/NavBar";
-import { Html, Head } from "next/head";
+// import { Html, Head } from "next/head";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,8 +30,12 @@ export default function RootLayout({
         />
       </Head> */}
       <body className={inter.className}>
-        <NavBar />
-        <div className="px-16 md:px-32 lg:px-64">{children}</div>
+        {/* <CacheProvider> */}
+          {/* <ChakraProvider> */}
+            <NavBar />
+            <div className="px-16 md:px-32 lg:px-64">{children}</div>
+          {/* </ChakraProvider> */}
+        {/* </CacheProvider> */}
       </body>
     </html>
   );

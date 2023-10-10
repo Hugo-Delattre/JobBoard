@@ -10,10 +10,14 @@
 html {
   font-size: 62.5%;
   overflow-y: scroll;
+  background-color: rgba(0, 0, 0, 0.936);
+  
   // height: 100%;
 }
 body {
   font-size: 1.6rem;
+  // background-color: rgba(0, 0, 0, 0.936);
+  
 }
 
 h1,
@@ -22,7 +26,6 @@ h2 {
 }
 
 body {
-  background-color: rgba(0, 0, 0, 0.936);
   color: white;
   height: 100%;
 }
@@ -161,9 +164,9 @@ html {
   overflow-y: scroll;
   // height: 100%;
 }
-body {
+// body {
   // font-size: 1.6rem;
-}
+// }
 
 /* :root {
   --max-width: 1100px;
