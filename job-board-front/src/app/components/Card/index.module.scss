@@ -1,0 +1,63 @@
+.main {
+  padding: 1.5rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  //  background-color: rgba(255, 255, 255, 0.473);
+
+  border: 1px white solid;
+}
+
+// .border {
+
+// }
+
+.checkbox {
+  cursor: auto;
+}
+
+.main_info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+}
+
+.title {
+  font-size: 1.2rem;
+}
+
+.description {
+  font-size: 0.9rem;
+  line-height: 22px;
+  font-weight: 300;
+}
+
+.collapseContent {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.9rem;
+  align-items: center;
+  background-color: rgba(240, 248, 255, 0.114);
+  // border: 1px solid white;
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.collapseContentLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-size: 0.9rem;
+
+  p:first-of-type {
+    line-height: 1.2rem;
+  }
+}
+
+// .collapseContentRight {
+// }

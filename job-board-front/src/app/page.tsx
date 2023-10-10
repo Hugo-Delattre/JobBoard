@@ -1,91 +1,92 @@
 import Image from "next/image";
-import styles from "./page.module.css";
+import Link from "next/link";
+// import styles from "./page.module.css";
+
+import Card from "./components/Card";
+import { title } from "process";
+
+const mockCardData = [
+  {
+    id: 1,
+    title: "Développeur web Next.js Express.js",
+    description:
+      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Deleniti, unde.",
+    company: "Google",
+    salary: 30000,
+    working_hours: 35,
+    active: true,
+    publish_date: new Date(),
+    images: [
+      "https://images.unsplash.com/photo-1622839686941-1a7b3c6a9a8b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8ZGV2ZWxvcG1lbnR8ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80",
+    ],
+    location: "Paris",
+    type: "CDI",
+  },
+  {
+    title: "Ingénieur full stack JAVA",
+    description:
+      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Deleniti, unde.",
+    company: "Google",
+    salary: 30000,
+    working_hours: 35,
+    active: true,
+    publish_date: new Date(),
+    images: [
+      "https://images.unsplash.com/photo-1622839686941-1a7b3c6a9a8b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8ZGV2ZWxvcG1lbnR8ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80",
+    ],
+    location: "Bordeaux",
+    type: "CDI"
+  },
+];
 
 export default function Home() {
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <h1 className="text-3xl font-bold underline">Hello world!</h1>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
+    <main className="align-middle justify-between items-center">
+      {/* <h2>Le job de vos rêves est à portée de clic</h2> */}
+      <div className="flex gap-8 flex-col mb-8">
+        {mockCardData.map((card) => {
+          return (
+            <Card
+              key={card.id}
+              title={card.title}
+              description={card.description}
+              company={card.company}
+              salary={card.salary}
+              working_hours={card.working_hours}
+              active={card.active}
+              publish_date={card.publish_date}
+              images={card.images}
+              location={card.location}
+              type={card.type}
             />
-          </a>
-        </div>
-      </div>
+          );
+        })}
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
+        {/* <Card
+          title="Développeur web Next.js Express.js"
+          description="Lorem ipsum, dolor sit amet consectetur adipisicing elit. Deleniti, unde."
+        /> */}
+        {/* <Card
+          title="Ingénieur full stack JAVA"
+          description="Passionné.e par le développement logiciel, vous détenez un Bac+5 avec au moins 1 an d’expérience réussie en développement web sur une stack JAVA, Spring, framework Javascript (Angular, Vue.js) ?"
         />
-      </div>
+        <Card
+          title="Développeur web Next.js Express.js"
+          description="Lorem ipsum, dolor sit amet consectetur adipisicing elit. Deleniti, unde."
+        />
+        <Card
+          title="Ingénieur full stack JAVA"
+          description="Passionné.e par le développement logiciel, vous détenez un Bac+5 avec au moins 1 an d’expérience réussie en développement web sur une stack JAVA, Spring, framework Javascript (Angular, Vue.js) ?"
+        />
+        <Card title="titre3" description="test3" />
+        <Card title="titre3" description="test3" />
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
+        <Card title="titre3" description="test3" />
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+        <Card title="titre3" description="test3" />
+        <Card title="titre3" description="test3" />
+        <Card title="titre3" description="test3" />
+        <Card title="titre3" description="test3" /> */}
       </div>
     </main>
   );
