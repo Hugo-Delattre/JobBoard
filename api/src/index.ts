@@ -6,9 +6,7 @@ import Auth from "./Auth";
 // import Applications from "./Applications";
 // import Files from "./Files";
 import database from "./database";
-import dotenv from "dotenv";
-
-dotenv.config();
+import "dotenv/config";
 
 const app = express();
 const port = process.env.port || 8000;
