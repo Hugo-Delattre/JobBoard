@@ -23,6 +23,7 @@ const mockCardData = [
     type: "CDI",
   },
   {
+    id: 2,
     title: "Ingénieur full stack JAVA",
     description:
       "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Deleniti, unde.",
@@ -48,6 +49,7 @@ export default function Home() {
           return (
             <Card
               key={card.id}
+              id={card.id}
               title={card.title}
               description={card.description}
               company={card.company}
@@ -88,6 +90,7 @@ export default function Home() {
         <Card title="titre3" description="test3" />
         <Card title="titre3" description="test3" /> */}
       </div>
+      <div className="flex gap-8 flex-col mb-8"></div>
     </main>
   );
 }

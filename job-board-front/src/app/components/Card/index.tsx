@@ -1,9 +1,14 @@
-import React from "react";
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { useAuthStore } from "@/app/store/auth-store";
 
 import styles from "./index.module.scss";
 
 interface Card {
+  id: number;
   title: string;
   description: string;
   company: string;
@@ -17,6 +22,7 @@ interface Card {
 }
 
 const Card = ({
+  id,
   title,
   description,
   company,
@@ -26,10 +32,15 @@ const Card = ({
   publish_date,
   images,
   location,
-  type
+  type,
 }: Card) => {
-  
+  const { register, handleSubmit } = useForm();
+
   const shortDescription = description.slice(0, 70);
+  const [isApplying, setIsApplying] = useState(false);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isLoggedIn } = useAuthStore();
+
   return (
     // <div className={styles.main}>
     //   <div className={styles.border}>
@@ -68,16 +79,228 @@ const Card = ({
             {/* <p>{publish_date}</p> */}
           </div>
           <div className={styles.collapseContentRight}>
-            <Link
-              href="/login"
+            <button
+              // href={`/apply/${id}`}
+              onClick={() => setIsApplying(!isApplying)}
               className="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800"
             >
               <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-                Apply
+                {!isApplying ? "Apply" : "Cancel"}
               </span>
-            </Link>
+            </button>
           </div>
         </div>
+        {isApplying && (
+          <div className={`${styles.collapseContent} ${styles.applyingForm}`}>
+            <div className={styles.container}>
+              {isLoggedIn ? (
+                <form
+                  className="form-control w-full max-w-xs"
+                  onSubmit={handleSubmit(async (data) => {
+                    console.log(data);
+                    // const res = await fetch(
+                    //   "http://localhost:3000/api/register",
+                    //   {
+                    //     method: "POST",
+                    //     body: JSON.stringify(data),
+                    //     headers: {
+                    //       "Content-Type": "application/json",
+                    //     },
+                    //   }
+                    // );
+                    // const json = await res.json();
+                    // console.log(json);
+                  })}
+                >
+                  {/* <h1>Register</h1> */}
+                  {/* <div>
+                    <label htmlFor="email">Email:</label>
+                    <input
+                      type="email"
+                      id="email"
+                      className="input input-bordered w-full max-w-xs"
+                      {...register("email", { required: true, minLength: 5 })}
+                      required
+                    />
+                  </div> */}
+
+                  {/* <div>
+                    <label htmlFor="firstName">First Name:</label>
+                    <input
+                      type="firstName"
+                      id="firstName"
+                      className="input input-bordered w-full max-w-xs"
+                      {...register("firstName", {
+                        required: true,
+                        minLength: 5,
+                      })}
+                    />
+                  </div> */}
+
+                  {/* <div>
+                    <label htmlFor="lastName">Last Name</label>
+                    <input
+                      type="lastName"
+                      id="lastName"
+                      className="input input-bordered w-full max-w-xs"
+                      {...register("lastName", {
+                        required: true,
+                        minLength: 5,
+                      })}
+                    />
+                  </div> */}
+
+                  {/* <div>
+                  <label htmlFor="username">Username</label>
+                  <input
+                    type="text"
+                    id="username"
+                    className="input input-bordered w-full max-w-xs"
+                    {...register("username", { required: true, minLength: 5 })}
+                  />
+                </div> */}
+
+                  <div>
+                    <label htmlFor="resume">Resume</label>
+                    <input
+                      type="text"
+                      id="resume"
+                      placeholder="Enter URL of your resume"
+                      className="input input-bordered w-full max-w-xs"
+                      {...register("resume", { required: true, minLength: 5 })}
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="resume">Message</label>
+                    <input
+                      type="textarea"
+                      id="resume"
+                      placeholder="Enter your motivation letter"
+                      className="input input-bordered w-full max-w-xs"
+                      {...register("resume", { required: true, minLength: 5 })}
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800"
+                  >
+                    <span className="relative px-5 py-2.5 transition-all ease-in duration-75  rounded-md group-hover:bg-opacity-0">
+                      Send application
+                    </span>
+                  </button>
+                </form>
+              ) : (
+                <>
+                  <form
+                    className="form-control w-full max-w-xs"
+                    onSubmit={handleSubmit(async (data) => {
+                      console.log(data);
+                      // const res = await fetch(
+                      //   "http://localhost:3000/api/register",
+                      //   {
+                      //     method: "POST",
+                      //     body: JSON.stringify(data),
+                      //     headers: {
+                      //       "Content-Type": "application/json",
+                      //     },
+                      //   }
+                      // );
+                      // const json = await res.json();
+                      // console.log(json);
+                    })}
+                  >
+                    {/* <h1>Register</h1> */}
+                    <div>
+                      <label htmlFor="email">Email:</label>
+                      <input
+                        type="email"
+                        id="email"
+                        className="input input-bordered w-full max-w-xs"
+                        {...register("email", { required: true, minLength: 5 })}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="firstName">First Name:</label>
+                      <input
+                        type="firstName"
+                        id="firstName"
+                        className="input input-bordered w-full max-w-xs"
+                        {...register("firstName", {
+                          required: true,
+                          minLength: 5,
+                        })}
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="lastName">Last Name</label>
+                      <input
+                        type="lastName"
+                        id="lastName"
+                        className="input input-bordered w-full max-w-xs"
+                        {...register("lastName", {
+                          required: true,
+                          minLength: 5,
+                        })}
+                      />
+                    </div>
+                    {/* <div>
+                    <label htmlFor="username">Username</label>
+                    <input
+                      type="text"
+                      id="username"
+                      className="input input-bordered w-full max-w-xs"
+                      {...register("username", { required: true, minLength: 5 })}
+                    />
+                  </div> */}
+                    <div>
+                      <label htmlFor="resume">Resume</label>
+                      <input
+                        type="text"
+                        id="resume"
+                        placeholder="Enter URL of your resume"
+                        className="input input-bordered w-full max-w-xs"
+                        {...register("resume", {
+                          required: true,
+                          minLength: 5,
+                        })}
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="resume">Message</label>
+                      <input
+                        type="textarea"
+                        id="resume"
+                        placeholder="Enter your motivation letter"
+                        className="input input-bordered w-full max-w-xs"
+                        {...register("resume", {
+                          required: true,
+                          minLength: 5,
+                        })}
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      className="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800"
+                    >
+                      <span className="relative px-5 py-2.5 transition-all ease-in duration-75  rounded-md group-hover:bg-opacity-0">
+                        Send application
+                      </span>
+                    </button>
+                  </form>
+                  <p className="opacity-50">
+                    Register to avoid filling your details each time.
+                  </p>
+                </>
+              )}
+              {/* {!isLoggedIn && (
+                
+              )} */}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
