@@ -1,4 +1,7 @@
+import { Application } from "express";
+import { Connection } from "mysql2/promise";
 import routes from "./routes";
-import * as model  from "./model";
 
-export default {routes, model};
+export default (app: Application, db: Connection) => {
+	routes(app, db);
+};

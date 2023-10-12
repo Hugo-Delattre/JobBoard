@@ -1,7 +1,8 @@
 import { Application } from "express";
-import routes from "./routes";
 import { Connection } from "mysql2/promise";
+import methods from "./methods";
 
 export default (app: Application, db: Connection) => {
-	routes(app, db);
+	app.post("/auth/register", methods(db).register);
+	app.post("/auth/login", methods(db).login);
 };

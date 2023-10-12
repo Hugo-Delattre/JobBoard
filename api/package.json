@@ -22,7 +22,6 @@
 		"eslint-config-prettier": "^9.0.0",
 		"eslint-plugin-prettier": "^5.0.0",
 		"nodemon": "^3.0.1",
-		"prettier": "^3.0.3",
 		"ts-node": "^10.9.1",
 		"tsconfig-paths": "^4.2.0",
 		"tsup": "^7.2.0",
@@ -30,9 +29,11 @@
 	},
 	"dependencies": {
 		"cors": "^2.8.5",
-		"eslint-plugin-align-assignments": "^1.1.2",
 		"express": "^4.18.2",
-		"sequelize": "^6.33.0",
+		"multer": "^1.4.5-lts.1",
+		"mysql2": "^3.6.1",
+		"prettier": "^3.0.3",
+		"prettier-eslint": "^15.0.1",
 		"sqlite3": "^5.1.6"
 	}
 }

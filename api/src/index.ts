@@ -1,21 +1,26 @@
 import express from "express";
-const app = express();
-
 import Users from "./Users";
-import Advertisements from "./Advertisements";
 import Companies from "./Companies";
-import Applications from "~/Applications";
-import { initializeDb } from "./db";
+import Advertisements from "./Advertisements";
+import Auth from "./Auth";
+// import Applications from "./Applications";
+// import Files from "./Files";
+import database from "./database";
 
+const app = express();
 const port = process.env.port || 8000;
 
 app.use(express.json());
 
-initializeDb().then(() => {
-	app.listen(port, () => console.log(`Listening on port ${port}`));
+(async () => {
+	const db = await database();
 
-	Users.routes(app);
-	Advertisements.routes(app);
-	Companies.routes(app);
-	Applications.routes(app);
-});
+	Users(app, db);
+	Companies(app, db);
+	Advertisements(app, db);
+	Auth(app, db);
+	// Applications.routes(app);
+	// Files.routes(app);
+})();
+
+app.listen(port, () => console.log(`Listening on port ${port}`));
