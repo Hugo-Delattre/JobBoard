@@ -1,23 +1,34 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./index.module.scss";
 import { useForm } from "react-hook-form";
+import { useAuthStore } from "@/app/store/auth-store";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-const RegisterPage = () => {
+const LoginPage = () => {
+  const router = useRouter();
   const { register, handleSubmit } = useForm();
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isLoggedIn, login, logout } = useAuthStore();
 
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
-  // const [confirmPassword, setConfirmPassword] = useState("");
+  useEffect(() => {
+    const data = window.localStorage.getItem("isLoggedIn");
+    if (typeof data === "string") {
+      logout();
+    }
+  }, []);
 
-  // const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  //   console.log("Email: ", email);
-  //   console.log("Password: ", password);
-  //   console.log("Confirm Password: ", confirmPassword);
-  // };
+  const connect = () => {
+    window.localStorage.setItem("isLoggedIn", JSON.stringify(true));
+    login();
+  };
+
+  // useEffect(() => {
+  //   window.localStorage.setItem("isLoggedIn", JSON.stringify(isLoggedIn));
+
+  // }, [isLoggedIn]);
 
   return (
     <div className={styles.container}>
@@ -34,6 +45,9 @@ const RegisterPage = () => {
           });
           const json = await res.json();
           console.log(json);
+          // Here setup the req res to the backend and call login() if credentials matches.
+          // connect();
+          // router.push("/");
         })}
       >
         {/* <h1>Register</h1> */}
@@ -65,12 +79,20 @@ const RegisterPage = () => {
           className="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800"
         >
           <span className="relative px-5 py-2.5 transition-all ease-in duration-75  rounded-md group-hover:bg-opacity-0">
-            Register
+            Login
           </span>
+        </button>
+        <button
+          onClick={() => {
+            connect();
+            router.push("/");
+          }}
+        >
+          Bypass
         </button>
       </form>
     </div>
   );
 };
 
-export default RegisterPage;
+export default LoginPage;

@@ -4,20 +4,12 @@ import React, { useState } from "react";
 import styles from "./index.module.scss";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
+import { useAuthStore } from "../store/auth-store";
 
 const RegisterPage = () => {
   const { register, handleSubmit } = useForm();
-
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
-  // const [confirmPassword, setConfirmPassword] = useState("");
-
-  // const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  //   console.log("Email: ", email);
-  //   console.log("Password: ", password);
-  //   console.log("Confirm Password: ", confirmPassword);
-  // };
+  const { login } = useAuthStore();
+  
 
   return (
     <div className={styles.container}>
