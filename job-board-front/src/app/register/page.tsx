@@ -5,27 +5,38 @@ import styles from "./index.module.scss";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
 import { useAuthStore } from "../store/auth-store";
+import { useRouter } from "next/navigation";
 
 const RegisterPage = () => {
   const { register, handleSubmit } = useForm();
   const { login } = useAuthStore();
-  
+  const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState("");
 
   return (
     <div className={styles.container}>
       <form
         className="form-control w-full max-w-xs"
         onSubmit={handleSubmit(async (data) => {
-          console.log(data);
-          const res = await fetch("http://localhost:3000/api/register", {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-          const json = await res.json();
-          console.log(json);
+          try {
+            console.log(data);
+            const res = await fetch("http://localhost:8000/users", {
+              method: "POST",
+              body: JSON.stringify(data),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+            const json = await res.json();
+            console.log("json", json);
+            if (res.ok) {
+              router.push("/login");
+            } else {
+              setErrorMessage(json);
+            }
+          } catch (error) {
+            console.log("error creating user:", error);
+          }
         })}
       >
         {/* <h1>Register</h1> */}
@@ -46,7 +57,7 @@ const RegisterPage = () => {
             type="firstName"
             id="firstName"
             className="input input-bordered w-full max-w-xs"
-            {...register("firstName", { required: true, minLength: 5 })}
+            {...register("firstName", { required: true })}
           />
         </div>
 
@@ -56,17 +67,7 @@ const RegisterPage = () => {
             type="lastName"
             id="lastName"
             className="input input-bordered w-full max-w-xs"
-            {...register("lastName", { required: true, minLength: 5 })}
-          />
-        </div>
-
-        <div>
-          <label htmlFor="username">Username</label>
-          <input
-            type="text"
-            id="username"
-            className="input input-bordered w-full max-w-xs"
-            {...register("username", { required: true, minLength: 5 })}
+            {...register("lastName", { required: true })}
           />
         </div>
 
@@ -79,8 +80,8 @@ const RegisterPage = () => {
             required
           >
             <option value="">Choose your role</option>
-            <option value="recruiter">Recruiter</option>
-            <option value="applicant">Applicant</option>
+            <option value="user">Applicant</option>
+            <option value="admin">Admin</option>
           </select>
         </div>
 
@@ -91,7 +92,7 @@ const RegisterPage = () => {
             id="resume"
             placeholder="Enter URL of your resume"
             className="input input-bordered w-full max-w-xs"
-            {...register("resume", { required: true, minLength: 5 })}
+            {...register("resume", { required: false })}
           />
         </div>
 
@@ -102,11 +103,11 @@ const RegisterPage = () => {
             id="password"
             placeholder="Enter your password"
             className="input input-bordered w-full max-w-xs"
-            {...register("password", { required: true, minLength: 5 })}
+            {...register("password", { required: true })}
           />
         </div>
         {/* <button type="submit">Register</button> */}
-
+        {errorMessage && <div className="text-red-500">{errorMessage}</div>}
         <button
           type="submit"
           className="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800"

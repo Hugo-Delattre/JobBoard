@@ -1,20 +1,27 @@
-const getProfileData = () => {
-  const jwt = localStorage.getItem('token');
+export const getProfileId = () => { 
+  const id = localStorage.getItem('id');
+  console.log("id: ", id);
+  
+  return id;
 }
 
-const saveToken = (token: string) => {
-  localStorage.setItem("token", token);
-}
+// const getProfileData = () => {
+//   const jwt = localStorage.getItem('token');
+// }
 
-const logoutByRemovingToken = () => {
-  localStorage.removeItem('token');
-}
+// const saveToken = (token: string) => {
+//   localStorage.setItem("token", token);
+// }
 
-const isLogged = () => {
-  const token = localStorage.getItem('token');
-  return !!token; // Double exclamation points converts to boolean
-}
+// const logoutByRemovingToken = () => {
+//   localStorage.removeItem('token');
+// }
 
-const getToken = () => {
-  return localStorage.getItem('token');
-}
+// const isLogged = () => {
+//   const token = localStorage.getItem('token');
+//   return !!token; // Double exclamation points converts to boolean
+// }
+
+// const getToken = () => {
+//   return localStorage.getItem('token');
+// }

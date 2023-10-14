@@ -4,22 +4,9 @@ import { useState } from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { useAuthStore } from "@/app/store/auth-store";
+import { Advertisement } from "@/app/page";
 
 import styles from "./index.module.scss";
-
-interface Card {
-  id: number;
-  title: string;
-  description: string;
-  company: string;
-  salary?: number;
-  working_hours: number;
-  images?: string[];
-  active?: boolean;
-  publish_date?: Date;
-  location: string;
-  type: string;
-}
 
 const Card = ({
   id,
@@ -33,7 +20,7 @@ const Card = ({
   images,
   location,
   type,
-}: Card) => {
+}: Advertisement) => {
   const { register, handleSubmit } = useForm();
 
   const shortDescription = description.slice(0, 70);
