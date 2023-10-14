@@ -1,9 +1,26 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 // import styles from "./page.module.css";
 
 import Card from "./components/Card";
 import { title } from "process";
+import { useEffect, useState } from "react";
+
+export interface Advertisement {
+  id: number;
+  title: string;
+  description: string;
+  company: string;
+  salary?: number;
+  working_hours: number;
+  images?: string[];
+  active?: boolean;
+  publish_date?: Date;
+  location: string;
+  type: string;
+}
 
 const mockCardData = [
   {
@@ -36,16 +53,38 @@ const mockCardData = [
       "https://images.unsplash.com/photo-1622839686941-1a7b3c6a9a8b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8ZGV2ZWxvcG1lbnR8ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80",
     ],
     location: "Bordeaux",
-    type: "CDI"
+    type: "CDI",
   },
 ];
 
 export default function Home() {
+  const [advertisements, setAdvertisements] = useState<Advertisement[]>([]);
+
+  useEffect(() => {
+    fetch("http://localhost:8000/advertisements")
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+        setAdvertisements(data);
+      })
+      .catch((error) => console.error("Error fetching data:", error));
+  }, []);
+
   return (
     <main className="align-middle justify-between items-center">
       {/* <h2>Le job de vos rêves est à portée de clic</h2> */}
       <div className="flex gap-8 flex-col mb-8">
-        {mockCardData.map((card) => {
+        {advertisements.length === 0 && (
+          <div className="flex justify-center my-60">
+            <span className="loading loading-spinner loading-lg"></span>
+          </div>
+        )}
+        {advertisements.map((card) => {
           return (
             <Card
               key={card.id}
