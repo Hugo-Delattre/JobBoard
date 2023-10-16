@@ -51,6 +51,15 @@
 
 .applyingForm {
   margin-top: 1rem;
+  
+  form {
+    display: flex;
+    gap: 1rem;
+    
+    input {
+      margin-top: 0.2rem;
+    }
+  }
 }
 
 .collapseContentLeft {

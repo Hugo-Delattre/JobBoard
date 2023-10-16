@@ -102,32 +102,6 @@ export default function Home() {
             />
           );
         })}
-
-        {/* <Card
-          title="Développeur web Next.js Express.js"
-          description="Lorem ipsum, dolor sit amet consectetur adipisicing elit. Deleniti, unde."
-        /> */}
-        {/* <Card
-          title="Ingénieur full stack JAVA"
-          description="Passionné.e par le développement logiciel, vous détenez un Bac+5 avec au moins 1 an d’expérience réussie en développement web sur une stack JAVA, Spring, framework Javascript (Angular, Vue.js) ?"
-        />
-        <Card
-          title="Développeur web Next.js Express.js"
-          description="Lorem ipsum, dolor sit amet consectetur adipisicing elit. Deleniti, unde."
-        />
-        <Card
-          title="Ingénieur full stack JAVA"
-          description="Passionné.e par le développement logiciel, vous détenez un Bac+5 avec au moins 1 an d’expérience réussie en développement web sur une stack JAVA, Spring, framework Javascript (Angular, Vue.js) ?"
-        />
-        <Card title="titre3" description="test3" />
-        <Card title="titre3" description="test3" />
-
-        <Card title="titre3" description="test3" />
-
-        <Card title="titre3" description="test3" />
-        <Card title="titre3" description="test3" />
-        <Card title="titre3" description="test3" />
-        <Card title="titre3" description="test3" /> */}
       </div>
       <div className="flex gap-8 flex-col mb-8"></div>
     </main>

@@ -148,7 +148,7 @@ const Card = ({
                 </div> */}
 
                   <div>
-                    <label htmlFor="resume">Resume</label>
+                    <label htmlFor="resume">Resume:</label>
                     <input
                       type="text"
                       id="resume"
@@ -159,7 +159,7 @@ const Card = ({
                   </div>
 
                   <div>
-                    <label htmlFor="resume">Message</label>
+                    <label htmlFor="resume">Message:</label>
                     <input
                       type="textarea"
                       id="resume"
@@ -222,7 +222,7 @@ const Card = ({
                       />
                     </div>
                     <div>
-                      <label htmlFor="lastName">Last Name</label>
+                      <label htmlFor="lastName">Last Name:</label>
                       <input
                         type="lastName"
                         id="lastName"
@@ -243,7 +243,7 @@ const Card = ({
                     />
                   </div> */}
                     <div>
-                      <label htmlFor="resume">Resume</label>
+                      <label htmlFor="resume">Resume:</label>
                       <input
                         type="text"
                         id="resume"
@@ -256,7 +256,7 @@ const Card = ({
                       />
                     </div>
                     <div>
-                      <label htmlFor="resume">Message</label>
+                      <label htmlFor="resume">Message:</label>
                       <input
                         type="textarea"
                         id="resume"
