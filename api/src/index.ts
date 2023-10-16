@@ -10,6 +10,7 @@ import Uploads from "./Uploads";
 import "dotenv/config";
 import cors from "cors";
 import database from "./database";
+import Applications from "./Applications";
 
 const app = express();
 const port = process.env.port || 8000;

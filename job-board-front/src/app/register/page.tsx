@@ -106,7 +106,6 @@ const RegisterPage = () => {
             {...register("password", { required: true })}
           />
         </div>
-        {/* <button type="submit">Register</button> */}
         {errorMessage && <div className="text-red-500">{errorMessage}</div>}
         <button
           type="submit"

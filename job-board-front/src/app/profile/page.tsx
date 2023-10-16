@@ -44,42 +44,40 @@ const ProfilePage = () => {
 
   return (
     <div className="collapse bg-base-200">
-      {!("data" in userData) && <p>Chargement...</p>}
+      {!("data" in userData) && (
+        <div className="flex justify-center my-60">
+          <span className="loading loading-spinner loading-lg"></span>
+        </div>
+      )}
       {"data" in userData && isEditing && (
-        // <div>Editing activated</div>
         <form
           className="p-4 flex gap-4 flex-col rounded"
           onSubmit={handleSubmit(async (data) => {
             try {
-            console.log("data", data);
-            console.log("userData", userData.data);
-            
-            const res = await fetch(
-              `http://localhost:8000/users/${userData.data.id}`,
-              {
-                method: "PUT",
-                body: JSON.stringify(data),
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              }
-            );
+              console.log("data", data);
+              console.log("userData", userData.data);
+
+              const res = await fetch(
+                `http://localhost:8000/users/${userData.data.id}`,
+                {
+                  method: "PUT",
+                  body: JSON.stringify(data),
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                }
+              );
               const json = await res.json;
               console.log("json", json);
               if (res.ok) {
                 setIsEditing(false);
                 console.log("user updated successfully");
-                
               } else {
-                // setErrorMessage(json);
                 console.log("error updating user");
-                
-              } 
+              }
             } catch (error) {
               console.log("error updating user:", error);
-              
             }
-            
           })}
         >
           <p>User ID: {userData.data.id}</p>
@@ -89,7 +87,7 @@ const ProfilePage = () => {
             {...register("id", { required: true })}
           />
           <label>
-            Email: 
+            Email:
             <input
               type="email"
               defaultValue={userData.data.email}
@@ -97,7 +95,7 @@ const ProfilePage = () => {
             />
           </label>
           <label>
-            First name: 
+            First name:
             <input
               type="text"
               defaultValue={userData.data.firstName}
@@ -105,7 +103,7 @@ const ProfilePage = () => {
             />
           </label>
           <label>
-            Last name: 
+            Last name:
             <input
               type="text"
               defaultValue={userData.data.lastName}
@@ -135,9 +133,7 @@ const ProfilePage = () => {
               bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800
               "
             >
-              {/* <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0"> */}
               Edit
-              {/* </span> */}
             </button>
           </div>
         </div>
