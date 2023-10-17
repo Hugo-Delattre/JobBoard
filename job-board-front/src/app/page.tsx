@@ -34,8 +34,8 @@ export default function Home() {
         return res.json();
       })
       .then((data) => {
-        console.log(data);
-        setAdvertisements(data);
+        console.log(data.data);
+        setAdvertisements(data.data);
       })
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
@@ -49,6 +49,8 @@ export default function Home() {
             <span className="loading loading-spinner loading-lg"></span>
           </div>
         )}
+        {/* {console.log("advertisementsTEST", advertisements.data[0])} */}
+
         {advertisements.map((card) => {
           return (
             <Card
