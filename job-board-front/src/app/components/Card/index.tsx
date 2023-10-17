@@ -4,22 +4,9 @@ import { useState } from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { useAuthStore } from "@/app/store/auth-store";
+import { Advertisement } from "@/app/page";
 
 import styles from "./index.module.scss";
-
-interface Card {
-  id: number;
-  title: string;
-  description: string;
-  company: string;
-  salary?: number;
-  working_hours: number;
-  images?: string[];
-  active?: boolean;
-  publish_date?: Date;
-  location: string;
-  type: string;
-}
 
 const Card = ({
   id,
@@ -33,7 +20,7 @@ const Card = ({
   images,
   location,
   type,
-}: Card) => {
+}: Advertisement) => {
   const { register, handleSubmit } = useForm();
 
   const shortDescription = description.slice(0, 70);
@@ -161,7 +148,7 @@ const Card = ({
                 </div> */}
 
                   <div>
-                    <label htmlFor="resume">Resume</label>
+                    <label htmlFor="resume">Resume:</label>
                     <input
                       type="text"
                       id="resume"
@@ -172,7 +159,7 @@ const Card = ({
                   </div>
 
                   <div>
-                    <label htmlFor="resume">Message</label>
+                    <label htmlFor="resume">Message:</label>
                     <input
                       type="textarea"
                       id="resume"
@@ -235,7 +222,7 @@ const Card = ({
                       />
                     </div>
                     <div>
-                      <label htmlFor="lastName">Last Name</label>
+                      <label htmlFor="lastName">Last Name:</label>
                       <input
                         type="lastName"
                         id="lastName"
@@ -256,7 +243,7 @@ const Card = ({
                     />
                   </div> */}
                     <div>
-                      <label htmlFor="resume">Resume</label>
+                      <label htmlFor="resume">Resume:</label>
                       <input
                         type="text"
                         id="resume"
@@ -269,7 +256,7 @@ const Card = ({
                       />
                     </div>
                     <div>
-                      <label htmlFor="resume">Message</label>
+                      <label htmlFor="resume">Message:</label>
                       <input
                         type="textarea"
                         id="resume"

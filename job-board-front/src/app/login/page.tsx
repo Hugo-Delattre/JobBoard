@@ -10,15 +10,15 @@ import Link from "next/link";
 const LoginPage = () => {
   const router = useRouter();
   const { register, handleSubmit } = useForm();
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { isLoggedIn, login, logout } = useAuthStore();
+  const [errorMessage, setErrorMessage] = useState("");
 
-  useEffect(() => {
-    const data = window.localStorage.getItem("isLoggedIn");
-    if (typeof data === "string") {
-      logout();
-    }
-  }, []);
+  // useEffect(() => {
+  //   const data = window.localStorage.getItem("isLoggedIn");
+  //   if (typeof data === "string") {
+  //     logout();
+  //   }
+  // }, []);
 
   const connect = () => {
     window.localStorage.setItem("isLoggedIn", JSON.stringify(true));
@@ -36,18 +36,28 @@ const LoginPage = () => {
         className="form-control w-full max-w-xs"
         onSubmit={handleSubmit(async (data) => {
           console.log(data);
-          const res = await fetch("http://localhost:3000/api/register", {
+          try {
+            const res = await fetch("http://localhost:8000/auth/login", {
             method: "POST",
             body: JSON.stringify(data),
             headers: {
               "Content-Type": "application/json",
             },
           });
-          const json = await res.json();
-          console.log(json);
-          // Here setup the req res to the backend and call login() if credentials matches.
-          // connect();
-          // router.push("/");
+          if (res.ok) {
+            console.log("logged in");
+            const json = await res.json();
+            console.log("json", json);
+            connect(); //set global isLoggedIn zustand state to true
+            // set id in local storage
+            window.localStorage.setItem("id", json.id);
+            router.push("/");
+          } else {
+            setErrorMessage("Invalid credentials");
+          }
+        } catch (error) {
+            console.log("error creating user:", error);
+          }
         })}
       >
         {/* <h1>Register</h1> */}
@@ -69,7 +79,7 @@ const LoginPage = () => {
             id="password"
             placeholder="Enter your password"
             className="input input-bordered w-full max-w-xs"
-            {...register("password", { required: true, minLength: 5 })}
+            {...register("password", { required: true, minLength: 3 })}
           />
         </div>
         {/* <button type="submit">Register</button> */}
@@ -82,14 +92,14 @@ const LoginPage = () => {
             Login
           </span>
         </button>
-        <button
+        {/* <button
           onClick={() => {
             connect();
             router.push("/");
           }}
         >
           Bypass
-        </button>
+        </button> */}
       </form>
     </div>
   );
