@@ -79,7 +79,7 @@ export default (
 				`
 			);
 			const advertisements = result;
-			res.status(200).json(advertisements);
+			res.status(200).json({ data: advertisements });
 		} catch (error) {
 			console.log(error);
 			res.status(500).json(error);

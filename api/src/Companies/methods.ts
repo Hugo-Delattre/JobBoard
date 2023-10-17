@@ -8,7 +8,7 @@ export default (
 		const { id } = req.params;
 
 		try {
-			const [company] = await db.query(
+			const [result] = await db.query(
 				`SELECT c.*,
 				(
 				  SELECT JSON_OBJECT(
@@ -24,7 +24,9 @@ export default (
 			  FROM companies c
 			  WHERE c.id = ${id};`
 			);
-			res.status(200).json(company);
+
+			const company = result[0 as keyof typeof result];
+			res.status(200).json({ data: company });
 		} catch (error) {
 			console.log(error);
 			res.status(500).json(error);
@@ -33,8 +35,9 @@ export default (
 
 	const getCompanies = async (req: Request, res: Response): Promise<void> => {
 		try {
-			const [companies] = await db.query("SELECT * FROM companies;");
-			res.status(200).json(companies);
+			const [result] = await db.query("SELECT * FROM companies;");
+			const companies = result;
+			res.status(200).json({ data: companies });
 		} catch (error) {
 			console.log(error);
 			res.status(500).json(error);

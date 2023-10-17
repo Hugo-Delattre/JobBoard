@@ -6,7 +6,7 @@ import { Inter } from "next/font/google";
 import NavBar from "./components/NavBar";
 // import { Html, Head } from "next/head";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
   title: "JobBoard",
@@ -30,11 +30,12 @@ export default function RootLayout({
         />
       </Head> */}
       <body className={inter.className}>
+        <div id="modals"></div>
         {/* <CacheProvider> */}
-          {/* <ChakraProvider> */}
-            <NavBar />
-            <div className="px-16 md:px-32 lg:px-64">{children}</div>
-          {/* </ChakraProvider> */}
+        {/* <ChakraProvider> */}
+        <NavBar />
+        <div className="px-4 mx-auto md:px-6 lg:px-8 max-w-7xl">{children}</div>
+        {/* </ChakraProvider> */}
         {/* </CacheProvider> */}
       </body>
     </html>

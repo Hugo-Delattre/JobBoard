@@ -1,6 +1,6 @@
 import { Application } from "express";
-import methods from "./methods";
 import { Connection } from "mysql2/promise";
+import methods from "./methods";
 
 export default (app: Application, db: Connection) => {
 	app.get("/users/:id", methods(db).getUser);
