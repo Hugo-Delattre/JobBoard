@@ -22,41 +22,6 @@ export interface Advertisement {
   type: string;
 }
 
-const mockCardData = [
-  {
-    id: 1,
-    title: "Développeur web Next.js Express.js",
-    description:
-      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Deleniti, unde.",
-    company: "Google",
-    salary: 30000,
-    working_hours: 35,
-    active: true,
-    publish_date: new Date(),
-    images: [
-      "https://images.unsplash.com/photo-1622839686941-1a7b3c6a9a8b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8ZGV2ZWxvcG1lbnR8ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80",
-    ],
-    location: "Paris",
-    type: "CDI",
-  },
-  {
-    id: 2,
-    title: "Ingénieur full stack JAVA",
-    description:
-      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Deleniti, unde.",
-    company: "Google",
-    salary: 30000,
-    working_hours: 35,
-    active: true,
-    publish_date: new Date(),
-    images: [
-      "https://images.unsplash.com/photo-1622839686941-1a7b3c6a9a8b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8ZGV2ZWxvcG1lbnR8ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80",
-    ],
-    location: "Bordeaux",
-    type: "CDI",
-  },
-];
-
 export default function Home() {
   const [advertisements, setAdvertisements] = useState<Advertisement[]>([]);
 
@@ -103,7 +68,6 @@ export default function Home() {
           );
         })}
       </div>
-      <div className="flex gap-8 flex-col mb-8"></div>
     </main>
   );
 }

@@ -114,9 +114,11 @@ DROP TABLE IF EXISTS `applications`;
 
 CREATE TABLE `applications` (
 
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
 
   `applicant` int DEFAULT NULL,
+  
+  `email` varchar(255) DEFAULT NULL,
 
   `resume` varchar(255) DEFAULT NULL,
 

@@ -13,6 +13,13 @@ import styles from "./index.module.scss";
 const NavBar = () => {
   const { isLoggedIn, login, logout } = useAuthStore();
   const router = useRouter();
+  
+  useEffect(() => { 
+    const isIdStorred = window.localStorage.getItem("id");
+    if (isIdStorred) {
+      login();
+    }
+  }, []);
 
   const disconnect = () => {
     window.localStorage.setItem("isLoggedIn", JSON.stringify(false));
