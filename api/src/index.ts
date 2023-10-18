@@ -10,6 +10,7 @@ import Uploads from "./Uploads";
 import "dotenv/config";
 import cors from "cors";
 import database from "./database";
+import Faker from "./Faker";
 
 const app = express();
 const port = process.env.port || 8000;
@@ -34,6 +35,7 @@ app.use((req, res, next) => {
 	Applications(app, db);
 	Uploads(app, db);
 	Dashboard(app, db);
+	Faker(app, db);
 })();
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
