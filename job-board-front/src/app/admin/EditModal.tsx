@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import Modal from '../components/Modal/Modal'
 import { Column } from '@/types/Database'
-import { editColumn } from '@/lib/requests/dashboard'
+import { editEntry } from '@/lib/requests/dashboard'
 import UsersForm from './UsersForm'
 
 type Props = {
@@ -20,7 +20,7 @@ export default function EditModal(props: Props) {
 
     const handleChange = async (key: string, value: any) => {
         props.dispatch(props.modified, key, value)
-        await editColumn(props.view, props.state.id, { [key]: value })
+        await editEntry(props.view, props.state.id, { [key]: value })
     }
 
     const renderForm = () => {
