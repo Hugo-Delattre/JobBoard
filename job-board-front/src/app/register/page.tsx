@@ -44,6 +44,7 @@ const RegisterPage = () => {
           <input
             type="email"
             id="email"
+            autoComplete="email"
             className="input input-bordered w-full max-w-xs"
             {...register("email", { required: true, minLength: 5 })}
             required
@@ -70,7 +71,7 @@ const RegisterPage = () => {
           />
         </div>
 
-        <div>
+        {/* <div>
           <label htmlFor="role">Role</label>
           <select
             id="role"
@@ -82,9 +83,9 @@ const RegisterPage = () => {
             <option value="user">Applicant</option>
             <option value="admin">Admin</option>
           </select>
-        </div>
+        </div> */}
 
-        <div>
+        {/* <div>
           <label htmlFor="resume">Resume</label>
           <input
             type="text"
@@ -93,7 +94,7 @@ const RegisterPage = () => {
             className="input input-bordered w-full max-w-xs"
             {...register("resume", { required: false })}
           />
-        </div>
+        </div> */}
 
         <div>
           <label htmlFor="password">Password</label>
@@ -102,6 +103,7 @@ const RegisterPage = () => {
             id="password"
             placeholder="Enter your password"
             className="input input-bordered w-full max-w-xs"
+            autoComplete="current-password"
             {...register("password", { required: true })}
           />
         </div>

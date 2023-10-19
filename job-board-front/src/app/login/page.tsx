@@ -36,10 +36,13 @@ const LoginPage = () => {
               console.log("logged in");
               const json = await res.json();
               console.log("json", json);
-              connect(); //set global isLoggedIn zustand state to true
-              // set id in local storage
+              connect(); //this connect function change global isLoggedIn zustand state to true and put id in local storage
               window.localStorage.setItem("id", json.id);
-              router.push("/");
+              if (json.role === "admin") {
+                router.push("/admin");
+              } else {
+                router.push("/");
+              }
             } else {
               setErrorMessage("Invalid credentials");
             }
@@ -54,6 +57,7 @@ const LoginPage = () => {
           <input
             type="email"
             id="email"
+            autoComplete="email"
             className="input input-bordered w-full max-w-xs"
             {...register("email", { required: true, minLength: 5 })}
             required
@@ -65,7 +69,7 @@ const LoginPage = () => {
           <input
             type="password"
             id="password"
-            placeholder="Enter your password"
+            autoComplete="current-password"
             className="input input-bordered w-full max-w-xs"
             {...register("password", { required: true, minLength: 3 })}
           />
