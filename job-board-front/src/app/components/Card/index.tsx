@@ -61,8 +61,10 @@ const Card = ({
     }
   };
 
+  // bg-base-200 or bg-slate-800 or bg-gray-800 or border border-white border-solid border-1
+
   return (
-    <div className="collapse bg-base-200">
+    <div className="collapse  bg-gray-900  border border-white border-solid border-1">
       <input type="checkbox" className={styles.checkbox} />
       <div className="collapse-title text-xl font-medium flex justify-between">
         <div>
@@ -70,7 +72,7 @@ const Card = ({
           <p className={styles.description}>{shortDescription}...</p>
         </div>
         <button className="cursor-pointer text-xs border-gray-50">
-          Click to 
+          Click to
           <br />
           learn more
         </button>
@@ -79,11 +81,11 @@ const Card = ({
         <div className={styles.collapseContent}>
           <div className={styles.collapseContentLeft}>
             <p className="w-11/12">{description}</p>
-            <p>Company: {company}</p>
-            <p>Salary: {salary}$</p>
-            <p>Working hours: {working_hours}</p>
+            {/* <p>Company: {company}</p> */}
             <p>Location: {location}</p>
             <p>Type: {type}</p>
+            <p>Working hours: {working_hours}</p>
+            <p>Salary: {salary}$</p>
             {/* <p>{active}</p> */}
             {/* <p>{publish_date}</p> */}
           </div>
@@ -145,12 +147,12 @@ const Card = ({
                     className="form-control w-full max-w-xs"
                     onSubmit={handleSubmit(handlerRegister)}
                   >
-                    {/* <h1>Register</h1> */}
                     <div>
                       <label htmlFor="email">Email:</label>
                       <input
                         type="email"
                         id="email"
+                        placeholder="Enter your email"
                         className="input input-bordered w-full max-w-xs"
                         {...register("email", { required: true })}
                         required
