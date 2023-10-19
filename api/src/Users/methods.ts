@@ -8,18 +8,9 @@ export default (db: Connection) => {
 		try {
 			const [result] = await db.query(
 				`
-				SELECT u.*,
-				(
-					SELECT JSON_OBJECT(
-						'id', c.id,
-						'name', c.name,
-						'sector', c.sector
-					)
-					FROM companies c
-					WHERE c.representative = u.id
-				) AS company
-				FROM users u
-				WHERE u.id = ${id};
+				SELECT *
+				FROM users
+				WHERE id = ${id};
 				`
 			);
 
@@ -28,7 +19,7 @@ export default (db: Connection) => {
 				res.status(200).json({
 					data: user,
 				});
-			else res.status(400).json({ message: `Couldn't find user ${id}.` });
+			else res.status(404).json({ message: `Couldn't find user ${id}.` });
 		} catch (error) {
 			console.log(error);
 			res.status(500).json(error);
@@ -39,17 +30,8 @@ export default (db: Connection) => {
 		try {
 			const [result] = await db.query(
 				`
-				SELECT u.*,
-				(
-					SELECT JSON_OBJECT(
-						'id', c.id,
-						'name', c.name,
-						'sector', c.sector
-					)
-					FROM companies c
-					WHERE c.representative = u.id
-				) AS company
-				FROM users u
+				SELECT *
+				FROM users;
 				`
 			);
 
@@ -121,9 +103,9 @@ export default (db: Connection) => {
 
 			if (modifiedCount > 0)
 				res.status(200).send({ message: `User ${id} modified.` });
-			else res.status(400).json({ message: `Couldn't find user ${id}` });
+			else res.status(404).json({ message: `Couldn't find user ${id}` });
 		} catch (error) {
-			res.status(400).json(error);
+			res.status(500).json(error);
 		}
 	};
 
