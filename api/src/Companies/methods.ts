@@ -74,5 +74,21 @@ export default (
 		}
 	};
 
-	return { getCompany, getCompanies, postCompany, putCompany };
+	const deleteCompany = async (req: Request, res: Response): Promise<void> => {
+		const { id } = req.params;
+
+		try {
+			const [result] = await db.query(`DELETE FROM companies WHERE id = ${id}`);
+			const deletedCount = result["affectedRows" as keyof typeof result];
+
+			if (deletedCount > 0)
+				res.status(200).json({ message: `Company ${id} deleted.` });
+			else res.status(404).json({ message: `Couldn't find company ${id}` });
+		} catch (error) {
+			console.log(error);
+			res.status(500).json(error);
+		}
+	};
+
+	return { getCompany, getCompanies, postCompany, putCompany, deleteCompany };
 };

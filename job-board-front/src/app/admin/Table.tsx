@@ -4,21 +4,23 @@ import React, { Reducer, useEffect, useReducer, useState } from 'react'
 import EditModal from './EditModal'
 import { getTableData, removeEntry } from '@/lib/requests/dashboard'
 import { BsFillTrashFill } from "react-icons/bs"
-import type { Column } from '@/types/Database'
+import { columns as dashboardColumns } from '@/data/dashboard'
 
 type Props = {
     view: string,
-    columns: Column[]
     data: Record<string, any>[]
 }
 
-type ValuesActionType = "SET" | "SETALL"
+type ValuesActionType = "SET" | "SETALL" | "REMOVE"
 
-type ValuesActionPayload<T> = Record<string, any> | { index: number; key: string; value: any }
+type ValuesActionPayload<T> =
+    T extends "SETALL" ? Record<string, any>[]
+    : T extends "SET" ? { index: number; key: string; value: any }
+    : T extends "REMOVE" ? number
+    : null
 
 
 type ValuesAction<T> = {
-    (arg: ValuesActionPayload<T>): T;
     type: ValuesActionType
     payload: ValuesActionPayload<T>;
 }
@@ -35,7 +37,7 @@ const reducer: Reducer<ValuesState, ValuesAction<ValuesActionType>> = (state: Va
             return state;
 
         case "SET":
-            if (Array.isArray(payload)) return state
+            if (Array.isArray(payload) || typeof payload === "number") return state
             if (state[payload.index] && payload.key in state[payload.index]) {
                 let newState = [...state]
                 newState[payload.index][payload.key] = payload.value
@@ -45,22 +47,32 @@ const reducer: Reducer<ValuesState, ValuesAction<ValuesActionType>> = (state: Va
 
             return state
 
+        case "REMOVE":
+            const index = state.findIndex((element: Record<string, any>) => {
+                return element.id === payload
+            })
+
+            if (index === -1) return state
+
+            const newState = [...state.slice(0, index), ...state.slice(index + 1)]
+
+            return newState
+
         default:
             return state
     }
 }
 
-export default function Table({ view, columns, data }: Props) {
-    const [state, dispatch] = useReducer(reducer, [...data])
+export default function Table({ view, data }: Props) {
+    const columns = dashboardColumns[view as keyof typeof dashboardColumns]
+    const [state, dispatch] = useReducer(reducer, data)
     const [modifiedValue, setModifiedValue] = useState<number>(-1)
 
     useEffect(() => {
         if (view)
             getTableData(view)
-                .then((d: Record<string, any>[]) => {
-                    if (Array.isArray(d))
-                        // @ts-ignore
-                        dispatch({ type: "SETALL", payload: d })
+                .then((tableData: Record<string, any>[]) => {
+                    dispatch({ type: "SETALL", payload: tableData })
                 })
                 .catch((err) => console.log(err))
     }, [view])
@@ -70,23 +82,26 @@ export default function Table({ view, columns, data }: Props) {
     }
 
     const handleRemove = (e: React.MouseEvent<HTMLButtonElement>, id: number) => {
-        e.preventDefault()
+        e.stopPropagation()
         removeEntry(view, id)
-
+            .then((r) => {
+                dispatch({ type: "REMOVE", payload: id })
+            }).catch((err) => {
+                console.log(err)
+            })
     }
 
-    const renderCell = (entry: any, x: number, y: number) => {
-        const value = typeof entry?.[1] === "object" ? entry[1]?.id : entry[1]
+    const renderCell = (column: string, index: number) => {
+        const value = state[index][column]
         return <span
-            className='flex w-full h-4'
+            className='flex w-full h-4 max-w-[320px] overflow-ellipsis'
         >
-            {value}
+            {typeof value === "object" ? value?.id : value}
         </span>
     }
 
     const renderColumns = (): React.ReactNode => {
         return state.map((record: Record<string, any>, index: number) => {
-            const entries = Object.entries(record)
             return (
                 <tr
                     key={index}
@@ -96,9 +111,9 @@ export default function Table({ view, columns, data }: Props) {
                     <td className='p-4'>
                         <input onClick={(e) => e.stopPropagation()} type='checkbox' />
                     </td>
-                    {entries.map((entry: any[], index2: number) => {
-                        return <td key={index2} className='p-4'>
-                            {renderCell(entry, index2, index)}
+                    {columns.map((column: string, index2: number) => {
+                        return <td key={index2} className='p-4 overflow-hidden'>
+                            {renderCell(column, index)}
                         </td>
                     })}
                     <td className=''>
@@ -131,9 +146,8 @@ export default function Table({ view, columns, data }: Props) {
                         <th className='flex items-center justify-center'>
                             <input type="checkbox" className='p-4' />
                         </th>
-                        {columns.map((c: Record<string, unknown>, index: number) => {
-                            if (c.name && typeof c.name === "string")
-                                return <th key={index} className='p-4'>{c.name}</th>
+                        {columns.map((c: string, index: number) => {
+                            return <th key={index} className='p-4'>{c}</th>
                         })}
                     </tr>
                 </thead>

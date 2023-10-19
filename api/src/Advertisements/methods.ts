@@ -93,22 +93,25 @@ export default (
 		const keys = Object.keys(req.body);
 
 		if (!keys.includes("title")) {
-			res.status(400).json({ message: "Error: Title is missing." });
+			res.status(400).json({ message: "Error: Title(title) is missing." });
 			return;
 		}
 
 		if (!keys.includes("company")) {
-			res.status(400).json({ message: "Error: Company is missing." });
+			res.status(400).json({ message: "Error: Company(company) is missing." });
 			return;
 		}
 
 		try {
-			const [result] = await db.query(`
-			INSERT INTO advertisements (
-				${keys.join(",")}
-			) VALUES (
-				${keys.map((key) => `"${req.body[key]}"`).join(",")}
-			)`);
+			const [result] = await db.query(
+				`
+				INSERT INTO advertisements (
+					${keys.join(",")}
+				) VALUES (
+					${keys.map((key) => `"${req.body[key]}"`).join(",")}
+				)
+				`
+			);
 
 			const id = result["insertId" as keyof typeof result];
 
@@ -162,7 +165,7 @@ export default (
 
 			if (deletedCount > 0)
 				res.status(200).json({ message: `Advertisement ${id} deleted.` });
-			else res.status(400).json({ message: `Couldn't find advertisement ${id}` });
+			else res.status(404).json({ message: `Couldn't find advertisement ${id}` });
 		} catch (error) {
 			console.log(error);
 			res.status(500).json(error);
