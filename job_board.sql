@@ -24,19 +24,19 @@ DROP TABLE IF EXISTS `advertisements`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `advertisements` (
   `id` int NOT NULL AUTO_INCREMENT,
+  `companyId` int NOT NULL,
   `title` varchar(255) NOT NULL,
-  `company` int NOT NULL,
-  `description` text,
+  `description` longtext,
   `salary` float DEFAULT NULL,
   `location` varchar(255) DEFAULT NULL,
-  `working_hours` int DEFAULT NULL,
+  `workingHours` int DEFAULT NULL,
   `type` varchar(255) DEFAULT NULL,
-  `images` int DEFAULT NULL,
-  `applications` int DEFAULT NULL,
-  `active` tinyint DEFAULT '1',
-  `publish_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `active` tinyint NOT NULL DEFAULT '1',
+  `publishDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `companyId` (`companyId`),
+  CONSTRAINT `advertisements_ibfk_1` FOREIGN KEY (`companyId`) REFERENCES `companies` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -56,12 +56,16 @@ DROP TABLE IF EXISTS `applications`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `applications` (
-  `id` int NOT NULL,
-  `applicant` int DEFAULT NULL,
-  `resume` varchar(255) DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `firstName` varchar(255) NOT NULL,
+  `lastName` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `phone` varchar(10) NOT NULL,
   `message` text,
-  `application_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
+  `advertisementId` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `advertisementId` (`advertisementId`),
+  CONSTRAINT `applications_ibfk_1` FOREIGN KEY (`advertisementId`) REFERENCES `advertisements` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -84,13 +88,13 @@ DROP TABLE IF EXISTS `companies`;
 CREATE TABLE `companies` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `representative` int DEFAULT NULL,
-  `advertisements` int DEFAULT NULL,
   `sector` varchar(255) DEFAULT NULL,
+  `userId` int NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `company_representative` (`representative`),
-  CONSTRAINT `company_representative` FOREIGN KEY (`representative`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  UNIQUE KEY `name` (`name`),
+  UNIQUE KEY `userId` (`userId`),
+  CONSTRAINT `companies_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -100,65 +104,6 @@ CREATE TABLE `companies` (
 LOCK TABLES `companies` WRITE;
 /*!40000 ALTER TABLE `companies` DISABLE KEYS */;
 /*!40000 ALTER TABLE `companies` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`noogs`@`localhost`*/ /*!50003 TRIGGER `insert_user_company` AFTER INSERT ON `companies` FOR EACH ROW BEGIN
-    UPDATE users SET company = NEW.id WHERE id = NEW.representative;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `update_user_company` AFTER UPDATE ON `companies` FOR EACH ROW BEGIN
-    IF NEW.representative <> OLD.representative THEN
-        UPDATE users SET company = NEW.id WHERE id = NEW.representative;
-    END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `uploads`
---
-
-DROP TABLE IF EXISTS `uploads`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `uploads` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `url` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `uploads`
---
-
-LOCK TABLES `uploads` WRITE;
-/*!40000 ALTER TABLE `uploads` DISABLE KEYS */;
-/*!40000 ALTER TABLE `uploads` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -175,15 +120,11 @@ CREATE TABLE `users` (
   `gender` enum('male','female','other') DEFAULT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `profilePicture` int DEFAULT NULL,
-  `resume` int DEFAULT NULL,
-  `role` enum('user','admin') DEFAULT 'user',
-  `company` int DEFAULT NULL,
+  `role` enum('user','admin') NOT NULL DEFAULT 'user',
+  `profilePicture` longtext,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `email` (`email`),
-  KEY `user_company` (`company`),
-  CONSTRAINT `user_company` FOREIGN KEY (`company`) REFERENCES `companies` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -204,8 +145,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-12 14:53:44
-Usage: mysqldump [OPTIONS] database [tables]
-OR     mysqldump [OPTIONS] --databases [OPTIONS] DB1 [DB2 DB3...]
-OR     mysqldump [OPTIONS] --all-databases [OPTIONS]
-For more options, use mysqldump --help
+-- Dump completed on 2023-10-19 15:27:02

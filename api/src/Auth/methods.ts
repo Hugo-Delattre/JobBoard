@@ -33,14 +33,14 @@ export default (
 		const { email, password } = req.body;
 
 		if (!email || !password) {
-			res.status(400).json({ message: "Missing email or password." });
+			res.status(404).json({ message: "Missing email or password." });
 			return;
 		}
 
 		try {
 			const [result] = await db.query(
 				`
-                SELECT id, email, password
+                SELECT id, email, password, role
                 FROM users
                 WHERE email = "${email}";
                 `
@@ -49,14 +49,16 @@ export default (
 			const user = result[0 as keyof typeof result];
 
 			if (!user || password !== user["password" as keyof typeof user])
-				res.status(400).json({ message: "Invalid credentials." });
+				res.status(404).json({ message: "Invalid credentials." });
 			else {
 				const id = user["id" as keyof typeof user];
-				res.status(200).json({ id });
+				const role = user["role" as keyof typeof user];
+
+				res.status(200).json({ id, role });
 			}
 		} catch (error) {
 			console.log(error);
-			res.status(400).json(error);
+			res.status(500).json(error);
 		}
 	};
 

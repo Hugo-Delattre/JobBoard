@@ -5,7 +5,6 @@ import Advertisements from "./Advertisements";
 import Auth from "./Auth";
 import Dashboard from "./Dashboard";
 import Applications from "./Applications";
-import Uploads from "./Uploads";
 
 import "dotenv/config";
 import cors from "cors";
@@ -33,7 +32,6 @@ app.use((req, res, next) => {
 	Advertisements(app, db);
 	Auth(app, db);
 	Applications(app, db);
-	Uploads(app, db);
 	Dashboard(app, db);
 	Faker(app, db);
 })();
