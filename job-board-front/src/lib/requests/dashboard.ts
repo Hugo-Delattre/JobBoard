@@ -26,12 +26,32 @@ export const getTableData = async (view: string): Promise<Record<string, unknown
     return data
 }
 
-export const editColumn = async (view: string, id: number, changes: Record<string, any>) => {
+export const addEntry = async (view: string, data: Record<string, any>) => {
+    const response = await fetch(`http://localhost:8000/${view}`, {
+        method: "POST",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify(data)
+    })
+
+    const d = await response.json()
+    console.log("post data", d)
+}
+
+export const editEntry = async (view: string, id: number, changes: Record<string, any>) => {
     await fetch(`http://localhost:8000/${view}/${id}`, {
         method: "PUT",
-        headers: {
-            "Content-type": "application/json"
-        },
+        headers: { "Content-type": "application/json" },
         body: JSON.stringify(changes)
     })
+}
+
+export const removeEntry = async (view: string, id: number) => {
+    const response = await fetch(`http://localhost:8000/${view}/${id}`, {
+        method: "DELETE"
+    })
+
+    if (response.status === 200) console.log("OK")
+    else console.log("FAILED")
+
+    console.log(response.status)
 }

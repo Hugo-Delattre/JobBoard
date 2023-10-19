@@ -27,8 +27,6 @@ export default (db: Connection) => {
 			const result: RemoteColumn[] = queryResult[0] as RemoteColumn[];
 			const columns: Column[] = [];
 
-			console.log(queryResult);
-
 			result.forEach((r: RemoteColumn) => {
 				columns.push(parseColumn(r));
 			});

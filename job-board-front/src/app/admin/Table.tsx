@@ -2,7 +2,8 @@
 
 import React, { Reducer, useEffect, useReducer, useState } from 'react'
 import EditModal from './EditModal'
-import { getTableData } from '@/lib/requests/dashboard'
+import { getTableData, removeEntry } from '@/lib/requests/dashboard'
+import { BsFillTrashFill } from "react-icons/bs"
 import type { Column } from '@/types/Database'
 
 type Props = {
@@ -68,6 +69,12 @@ export default function Table({ view, columns, data }: Props) {
         setModifiedValue(index)
     }
 
+    const handleRemove = (e: React.MouseEvent<HTMLButtonElement>, id: number) => {
+        e.preventDefault()
+        removeEntry(view, id)
+
+    }
+
     const renderCell = (entry: any, x: number, y: number) => {
         const value = typeof entry?.[1] === "object" ? entry[1]?.id : entry[1]
         return <span
@@ -94,6 +101,14 @@ export default function Table({ view, columns, data }: Props) {
                             {renderCell(entry, index2, index)}
                         </td>
                     })}
+                    <td className=''>
+                        <button
+                            className='p-4 rounded-md bg-white/20 hover:bg-red-500'
+                            onClick={(e) => handleRemove(e, record.id)}
+                        >
+                            <BsFillTrashFill />
+                        </button>
+                    </td>
                 </tr>
             )
         })
@@ -113,7 +128,9 @@ export default function Table({ view, columns, data }: Props) {
             <table className='inline w-full overflow-x-auto overflow-y-hidden text-left border-collapse table-auto max-w-fit border-spacing-8'>
                 <thead>
                     <tr>
-                        <th></th>
+                        <th className='flex items-center justify-center'>
+                            <input type="checkbox" className='p-4' />
+                        </th>
                         {columns.map((c: Record<string, unknown>, index: number) => {
                             if (c.name && typeof c.name === "string")
                                 return <th key={index} className='p-4'>{c.name}</th>
