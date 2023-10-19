@@ -13,49 +13,37 @@ const LoginPage = () => {
   const { isLoggedIn, login, logout } = useAuthStore();
   const [errorMessage, setErrorMessage] = useState("");
 
-  // useEffect(() => {
-  //   const data = window.localStorage.getItem("isLoggedIn");
-  //   if (typeof data === "string") {
-  //     logout();
-  //   }
-  // }, []);
-
   const connect = () => {
     window.localStorage.setItem("isLoggedIn", JSON.stringify(true));
     login();
   };
 
-  // useEffect(() => {
-  //   window.localStorage.setItem("isLoggedIn", JSON.stringify(isLoggedIn));
-
-  // }, [isLoggedIn]);
-
   return (
     <div className={styles.container}>
       <form
-        className="form-control w-full max-w-xs"
+        className="form-control w-full max-w-xs bg-slate-800"
         onSubmit={handleSubmit(async (data) => {
           console.log(data);
           try {
             const res = await fetch("http://localhost:8000/auth/login", {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-          if (res.ok) {
-            console.log("logged in");
-            const json = await res.json();
-            console.log("json", json);
-            connect(); //set global isLoggedIn zustand state to true
-            // set id in local storage
-            window.localStorage.setItem("id", json.id);
-            router.push("/");
-          } else {
-            setErrorMessage("Invalid credentials");
-          }
-        } catch (error) {
+              method: "POST",
+              body: JSON.stringify(data),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+            if (res.ok) {
+              console.log("logged in");
+              const json = await res.json();
+              console.log("json", json);
+              connect(); //set global isLoggedIn zustand state to true
+              // set id in local storage
+              window.localStorage.setItem("id", json.id);
+              router.push("/");
+            } else {
+              setErrorMessage("Invalid credentials");
+            }
+          } catch (error) {
             console.log("error creating user:", error);
           }
         })}

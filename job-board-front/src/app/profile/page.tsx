@@ -43,13 +43,8 @@ const ProfilePage = () => {
   }, [isEditing]);
 
   return (
-    <div className="px-16 md:px-32 lg:px-64">
-      {/* <h3 className="text-xl"> */}
-      {/* Welcome to your profile page. */}
-      {/* {userData && {userData}} */}
-      {/* </h3> */}
-      {/* <p className="mb-4">Feel free to edit your personal informations.</p> */}
-      <div className="border border-white border-solid border-1 text-lg border rounded-lg ">
+    <div className="px-8 mb-8 md:px-32 lg:px-64">
+      <div className="border border-white border-solid border-1 text-lg rounded-lg ">
         {!("data" in userData) && (
           <div className="flex justify-center my-60">
             <span className="loading loading-spinner loading-lg"></span>
@@ -58,7 +53,7 @@ const ProfilePage = () => {
 
         {"data" in userData && isEditing && (
           <form
-            className="flex flex-col rounded "
+            className="flex flex-col rounded"
             onSubmit={handleSubmit(async (data) => {
               try {
                 console.log("data", data);
@@ -88,7 +83,7 @@ const ProfilePage = () => {
           >
             <div>
               <div>
-                <div className="p-4 px-22 flex py-2 gap-4 flex-col justify-center md:flex-row items-center bg-slate-800 rounded-t-lg">
+                <div className="p-8 px-22 flex gap-4 flex-col justify-center md:flex-row items-center bg-slate-800 rounded-t-lg">
                   <Image
                     src="https://cdn.discordapp.com/attachments/1081136403137712150/1082991411340791958/TravelSquadDefaultUserImage.webp?ex=65423959&is=652fc459&hm=24958223005562882e48ab9037a3230c40bfd930b5085c0ebdc479d5100f1181&"
                     alt="profile picture"
@@ -96,11 +91,13 @@ const ProfilePage = () => {
                     height={200}
                     className="filter brightness-0 invert"
                   />
-                  <div>
+                  <div className="flex flex-col gap-4">
                     <div>
-                      <label>
+                      <label className="text-sm">
                         First name:
+                        <br />
                         <input
+                          className="text-lg rounded-md px-2 bg-slate-900"
                           type="text"
                           defaultValue={userData.data.firstName}
                           {...register("firstName", { required: false })}
@@ -108,19 +105,23 @@ const ProfilePage = () => {
                       </label>
                     </div>
                     <div>
-                      <label>
+                      <label className="text-sm">
                         Last name:
+                        <br />
                         <input
                           type="text"
+                          className="text-lg rounded-md px-2 bg-slate-900"
                           defaultValue={userData.data.lastName}
                           {...register("lastName", { required: false })}
                         />
                       </label>
                     </div>
-                    <label>
+                    <label className="text-sm">
                       Email:
+                      <br />
                       <input
                         type="email"
+                        className="text-lg rounded-md px-2 bg-slate-900"
                         defaultValue={userData.data.email}
                         {...register("email", { required: false })}
                       />
@@ -135,7 +136,7 @@ const ProfilePage = () => {
                 </div>
               </div>
             </div>
-            <div className="">
+            <div>
               <div className="border border-white border-solid rounded-b-lg bg-slate-800 flex justify-center py-2 bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800">
                 <button onClick={() => setIsEditing(true)} className="">
                   <LiaSaveSolid className="w-6 h-6" />
@@ -148,7 +149,7 @@ const ProfilePage = () => {
           <div>
             <div>
               <div>
-                <div className="p-4 px-22 flex gap-4 flex-col justify-center md:flex-row items-center bg-slate-800 rounded-t-lg">
+                <div className="p-8 px-22 flex gap-4 flex-col justify-center md:flex-row items-center bg-slate-800 rounded-t-lg">
                   <Image
                     src="https://cdn.discordapp.com/attachments/1081136403137712150/1082991411340791958/TravelSquadDefaultUserImage.webp?ex=65423959&is=652fc459&hm=24958223005562882e48ab9037a3230c40bfd930b5085c0ebdc479d5100f1181&"
                     alt="profile picture"

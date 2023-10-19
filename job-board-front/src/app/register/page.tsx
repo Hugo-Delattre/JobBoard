@@ -16,7 +16,7 @@ const RegisterPage = () => {
   return (
     <div className={styles.container}>
       <form
-        className="form-control w-full max-w-xs"
+        className="form-control w-full max-w-xs bg-slate-800"
         onSubmit={handleSubmit(async (data) => {
           try {
             console.log(data);
@@ -39,7 +39,6 @@ const RegisterPage = () => {
           }
         })}
       >
-        {/* <h1>Register</h1> */}
         <div>
           <label htmlFor="email">Email:</label>
           <input
