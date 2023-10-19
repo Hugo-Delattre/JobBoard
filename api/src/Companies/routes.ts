@@ -7,4 +7,5 @@ export default (app: Application, db: Connection) => {
 	app.get("/companies", methods(db).getCompanies);
 	app.post("/companies", methods(db).postCompany);
 	app.put("/companies/:id", methods(db).putCompany);
+	app.delete("/companies/:id", methods(db).deleteCompany);
 };

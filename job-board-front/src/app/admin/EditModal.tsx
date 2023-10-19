@@ -5,11 +5,14 @@ import Modal from '../components/Modal/Modal'
 import { Column } from '@/types/Database'
 import { editEntry } from '@/lib/requests/dashboard'
 import UsersForm from './UsersForm'
+import CompaniesForm from './CompaniesForm'
+import AdvertisementsForm from './AdvertisementsForm'
+import ApplicationsForm from './ApplicationsForm'
 
 type Props = {
     view: string,
     modified: number,
-    fields: Column[]
+    fields: string[]
     onClose?: CallableFunction,
     state: Record<string, any>,
     dispatch: CallableFunction
@@ -26,12 +29,33 @@ export default function EditModal(props: Props) {
     const renderForm = () => {
         switch (props.view) {
             case "users":
-                return <UsersForm
-                    getUser={() => props.state}
-                    onChange={(key: string, value: any) => handleChange(key, value)}
-                />
+                return (
+                    <UsersForm
+                        getUser={() => props.state}
+                        onChange={(key: string, value: any) => handleChange(key, value)}
+                    />
+                )
             case "companies":
-                return
+                return (
+                    <CompaniesForm
+                        getCompany={() => props.state}
+                        onChange={(key: string, value: any) => handleChange(key, value)}
+                    />
+                )
+            case "advertisements":
+                return (
+                    <AdvertisementsForm
+                        getAdvertisement={() => props.state}
+                        onChange={(key: string, value: any) => handleChange(key, value)}
+                    />
+                )
+            case "applications":
+                return (
+                    <ApplicationsForm
+                        getApplication={() => props.state}
+                        onChange={(key: string, value: any) => handleChange(key, value)}
+                    />
+                )
             default:
                 return
         }

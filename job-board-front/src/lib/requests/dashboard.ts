@@ -8,15 +8,6 @@ export const getTables = async (): Promise<string[]> => {
     return data
 }
 
-export const getColumns = async (view: string): Promise<Column[]> => {
-    if (!view) return []
-    const response = await fetch(`http://localhost:8000/dashboard/tables/${view}`)
-    if (response.status !== 200) return []
-    const { data } = await response.json()
-
-    return data
-}
-
 export const getTableData = async (view: string): Promise<Record<string, unknown>[]> => {
     if (!view) return []
     const response = await fetch(`http://localhost:8000/${view}`)
@@ -50,8 +41,6 @@ export const removeEntry = async (view: string, id: number) => {
         method: "DELETE"
     })
 
-    if (response.status === 200) console.log("OK")
-    else console.log("FAILED")
-
-    console.log(response.status)
+    if (response.status === 200) return true
+    throw false
 }

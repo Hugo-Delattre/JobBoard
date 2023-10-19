@@ -16,7 +16,7 @@ export default (db: Connection) => {
 						'sector', c.sector
 					)
 					FROM companies c
-					WHERE c.id = u.company
+					WHERE c.representative = u.id
 				) AS company
 				FROM users u
 				WHERE u.id = ${id};
@@ -47,7 +47,7 @@ export default (db: Connection) => {
 						'sector', c.sector
 					)
 					FROM companies c
-					WHERE c.id = u.company
+					WHERE c.representative = u.id
 				) AS company
 				FROM users u
 				`
@@ -65,22 +65,22 @@ export default (db: Connection) => {
 		const keys = Object.keys(req.body);
 
 		if (!keys.includes("firstName")) {
-			res.status(400).json({ message: "First name is missing." });
+			res.status(400).json({ message: "First name(firstName) is missing." });
 			return;
 		}
 
 		if (!keys.includes("lastName")) {
-			res.status(400).json({ message: "Last name is missing." });
+			res.status(400).json({ message: "Last name(lastName) is missing." });
 			return;
 		}
 
 		if (!keys.includes("email")) {
-			res.status(400).json({ message: "Email is missing." });
+			res.status(400).json({ message: "Email(email) is missing." });
 			return;
 		}
 
 		if (!keys.includes("password")) {
-			res.status(400).json({ message: "Password is missing." });
+			res.status(400).json({ message: "Password(password) is missing." });
 			return;
 		}
 
@@ -136,7 +136,7 @@ export default (db: Connection) => {
 
 			if (deletedCount > 0)
 				res.status(200).json({ message: `User ${id} deleted.` });
-			else res.status(400).json({ message: `Couldn't find user ${id}` });
+			else res.status(404).json({ message: `Couldn't find user ${id}` });
 		} catch (error) {
 			console.log(error);
 			res.status(500).json(error);

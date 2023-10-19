@@ -7,8 +7,6 @@ export interface Advertisement {
     location: string
     workingHours: number
     type: string
-    images: number[]
-    applications: number[]
     active: boolean
     publishDate: Date
 }

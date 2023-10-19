@@ -31,9 +31,7 @@ export default function UsersForm({ getUser, onChange }: Props) {
             <FormSelect onChange={(value: any) => onChange("gender", value)} options={genderOptions} name='gender' value={user.gender} />
             <FormField type='email' onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.name, e.target.value)} name='email' value={user.email} />
             <FormField type='password' onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.name, e.target.value)} name='password' value={user.password} />
-            <FormField type='number' onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.name, e.target.value)} name='company' value={user.company} />
-            <FormField type='number' onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.name, e.target.value)} name='profilePicture' value={user.profilePicture} />
-            <FormField type='number' onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.name, e.target.value)} name='resume' value={user.resume} />
+            <FormField type='text' onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.name, e.target.value)} name='profilePicture' value={user.profilePicture} />
             <FormSelect onChange={(value: any) => onChange("role", value)} options={roleOptions} name='role' value={user.role} />
         </Form>
     )
