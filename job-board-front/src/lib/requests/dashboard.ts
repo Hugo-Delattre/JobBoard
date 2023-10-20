@@ -1,5 +1,3 @@
-import { Column } from "@/types/Database"
-
 export const getTables = async (): Promise<string[]> => {
     const response = await fetch("http://localhost:8000/dashboard/tables")
     if (response.status !== 200) return []
@@ -24,8 +22,12 @@ export const addEntry = async (view: string, data: Record<string, any>) => {
         body: JSON.stringify(data)
     })
 
-    const d = await response.json()
-    console.log("post data", d)
+    if (response.status === 200) {
+        const { id } = await response.json()
+        return id
+    }
+
+    throw false
 }
 
 export const editEntry = async (view: string, id: number, changes: Record<string, any>) => {

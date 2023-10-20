@@ -2,62 +2,65 @@
 
 import React, { useEffect, useState } from 'react'
 import Modal from '../components/Modal/Modal'
-import { editEntry } from '@/lib/requests/dashboard'
 import UsersForm from './UsersForm'
 import CompaniesForm from './CompaniesForm'
 import AdvertisementsForm from './AdvertisementsForm'
 import ApplicationsForm from './ApplicationsForm'
+import { addEntry } from '@/lib/requests/dashboard'
 
 type Props = {
-    view: string,
-    modified: number,
-    fields: string[]
-    onClose?: CallableFunction,
-    state: Record<string, any>,
+    view: string
+    onClose?: CallableFunction
+    addingEntry: boolean
     dispatch: CallableFunction
 }
 
-export default function EditModal(props: Props) {
+export default function AddModal(props: Props) {
     const [visible, setVisible] = useState<boolean>(false)
-
-    const handleChange = async (key: string, value: any) => {
-        props.dispatch(props.modified, key, value)
-        await editEntry(props.view, props.state.id, { [key]: value })
-    }
 
     const renderForm = () => {
         switch (props.view) {
             case "users":
                 return (
                     <UsersForm
-                        getUser={() => props.state}
-                        onChange={(key: string, value: any) => handleChange(key, value)}
+                        onSubmit={handleSubmit}
                     />
                 )
             case "companies":
                 return (
                     <CompaniesForm
-                        getCompany={() => props.state}
-                        onChange={(key: string, value: any) => handleChange(key, value)}
+                        onSubmit={handleSubmit}
                     />
                 )
             case "advertisements":
                 return (
                     <AdvertisementsForm
-                        getAdvertisement={() => props.state}
-                        onChange={(key: string, value: any) => handleChange(key, value)}
+                        onSubmit={handleSubmit}
+
                     />
                 )
             case "applications":
                 return (
                     <ApplicationsForm
-                        getApplication={() => props.state}
-                        onChange={(key: string, value: any) => handleChange(key, value)}
+                        onSubmit={handleSubmit}
                     />
                 )
             default:
                 return
         }
+    }
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+        const target = e.target as HTMLFormElement
+        const formData = new FormData(target)
+        const data: Record<string, any> = {}
+
+        formData.forEach((v, k) => data[k] = v)
+
+        const id = await addEntry(props.view, data)
+
+        if (id) props.dispatch({ ...data, id })
     }
 
     const handleClose = () => {
@@ -83,8 +86,8 @@ export default function EditModal(props: Props) {
     }, [visible])
 
     useEffect(() => {
-        setVisible(props.modified >= 0)
-    }, [props.modified])
+        setVisible(props.addingEntry)
+    }, [props.addingEntry])
 
     return (
         <Modal>
@@ -112,7 +115,7 @@ export default function EditModal(props: Props) {
                         </span>
                     </div>
                     <div className='flex flex-col items-center h-full gap-4 py-8 overflow-y-auto max-h-[80vh] overflow-y-auto'>
-                        {props.modified >= 0 ?
+                        {props.addingEntry ?
                             renderForm()
                             : null
                         }

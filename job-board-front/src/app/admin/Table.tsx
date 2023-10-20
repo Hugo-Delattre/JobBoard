@@ -5,17 +5,19 @@ import EditModal from './EditModal'
 import { getTableData, removeEntry } from '@/lib/requests/dashboard'
 import { BsFillTrashFill } from "react-icons/bs"
 import { columns as dashboardColumns } from '@/data/dashboard'
+import AddModal from './AddModal'
 
 type Props = {
     view: string,
     data: Record<string, any>[]
 }
 
-type ValuesActionType = "SET" | "SETALL" | "REMOVE"
+type ValuesActionType = "SET" | "SETALL" | "ADD" | "REMOVE"
 
 type ValuesActionPayload<T> =
     T extends "SETALL" ? Record<string, any>[]
     : T extends "SET" ? { index: number; key: string; value: any }
+    : T extends "ADD" ? Record<string, any>
     : T extends "REMOVE" ? number
     : null
 
@@ -47,6 +49,9 @@ const reducer: Reducer<ValuesState, ValuesAction<ValuesActionType>> = (state: Va
 
             return state
 
+        case "ADD":
+            return [...state, payload]
+
         case "REMOVE":
             const index = state.findIndex((element: Record<string, any>) => {
                 return element.id === payload
@@ -67,6 +72,7 @@ export default function Table({ view, data }: Props) {
     const columns = dashboardColumns[view as keyof typeof dashboardColumns]
     const [state, dispatch] = useReducer(reducer, data)
     const [modifiedValue, setModifiedValue] = useState<number>(-1)
+    const [addingEntry, setAddingEntry] = useState<boolean>(false)
 
     useEffect(() => {
         if (view)
@@ -94,7 +100,7 @@ export default function Table({ view, data }: Props) {
     const renderCell = (column: string, index: number) => {
         const value = state[index][column]
         return <span
-            className='flex w-full h-4 max-w-[320px] overflow-ellipsis'
+            className='flex w-full h-4 w-fit max-w-[100px]'
         >
             {typeof value === "object" ? value?.id : value}
         </span>
@@ -106,19 +112,19 @@ export default function Table({ view, data }: Props) {
                 <tr
                     key={index}
                     onClick={() => handleEdit(index)}
-                    className='rounded-full cursor-pointer hover:bg-gray-800'
+                    className='py-10 rounded-full cursor-pointer hover:bg-gray-800'
                 >
-                    <td className='p-4'>
+                    <td className='flex items-center p-4'>
                         <input onClick={(e) => e.stopPropagation()} type='checkbox' />
                     </td>
                     {columns.map((column: string, index2: number) => {
-                        return <td key={index2} className='p-4 overflow-hidden'>
+                        return <td key={index2} className='p-4 overflow-hidden text-ellipsis whitespace-nowrap'>
                             {renderCell(column, index)}
                         </td>
                     })}
-                    <td className=''>
+                    <td className='flex items-center'>
                         <button
-                            className='p-4 rounded-md bg-white/20 hover:bg-red-500'
+                            className='p-4 scale-90 rounded-md bg-white/20 hover:bg-red-500'
                             onClick={(e) => handleRemove(e, record.id)}
                         >
                             <BsFillTrashFill />
@@ -136,10 +142,18 @@ export default function Table({ view, data }: Props) {
                 modified={modifiedValue}
                 onClose={() => setModifiedValue(-1)}
                 state={state[modifiedValue]}
-                // @ts-ignore
                 dispatch={(index: number, key: string, value: any) => dispatch({ type: "SET", payload: { index, key, value } })}
                 fields={columns}
             />
+
+            <AddModal
+                view={view}
+                onClose={() => setAddingEntry(false)}
+                dispatch={(data: Record<string, any>) => dispatch({ type: "ADD", payload: data })}
+                addingEntry={addingEntry}
+            >
+            </AddModal>
+
             <table className='inline w-full overflow-x-auto overflow-y-hidden text-left border-collapse table-auto max-w-fit border-spacing-8'>
                 <thead>
                     <tr>
@@ -149,6 +163,13 @@ export default function Table({ view, data }: Props) {
                         {columns.map((c: string, index: number) => {
                             return <th key={index} className='p-4'>{c}</th>
                         })}
+                        <th>
+                            <button
+                                onClick={() => setAddingEntry(true)}
+                                className='w-12 h-12 scale-90 bg-blue-500 rounded-md hover:bg-blue-600'>
+                                +
+                            </button>
+                        </th>
                     </tr>
                 </thead>
                 <tbody className='relative'>
