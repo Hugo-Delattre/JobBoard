@@ -11,8 +11,6 @@ export const metadata = {
   title: "Dashboard"
 }
 
-
-
 export default async function Dashboard(props: Props) {
   const { view } = props.searchParams
 
@@ -21,8 +19,12 @@ export default async function Dashboard(props: Props) {
 
   return (
     <div className='flex flex-col gap-16 md:items-center'>
-      <Tabs view={view} tables={tables} />
-      <Table view={view} data={data} />
+      {!!view &&
+        <>
+          <Tabs view={view} tables={tables} />
+          <Table view={view} data={data} />
+        </>
+      }
     </div>
   )
 }
