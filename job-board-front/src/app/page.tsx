@@ -42,14 +42,12 @@ export default function Home() {
 
   return (
     <main className="align-middle justify-between items-center">
-      {/* <h2>Le job de vos rêves est à portée de clic</h2> */}
       <div className="flex gap-8 flex-col mb-8">
         {advertisements.length === 0 && (
           <div className="flex justify-center my-60">
             <span className="loading loading-spinner loading-lg"></span>
           </div>
         )}
-        {/* {console.log("advertisementsTEST", advertisements.data[0])} */}
 
         {advertisements.map((card) => {
           return (

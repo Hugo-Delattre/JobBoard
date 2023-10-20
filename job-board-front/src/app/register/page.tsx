@@ -8,7 +8,11 @@ import { useAuthStore } from "../store/auth-store";
 import { useRouter } from "next/navigation";
 
 const RegisterPage = () => {
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm();
   const { login } = useAuthStore();
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState("");
@@ -16,7 +20,7 @@ const RegisterPage = () => {
   return (
     <div className={styles.container}>
       <form
-        className="form-control w-full max-w-xs"
+        className="form-control w-full max-w-xs bg-slate-800"
         onSubmit={handleSubmit(async (data) => {
           try {
             console.log(data);
@@ -39,12 +43,12 @@ const RegisterPage = () => {
           }
         })}
       >
-        {/* <h1>Register</h1> */}
         <div>
           <label htmlFor="email">Email:</label>
           <input
             type="email"
             id="email"
+            autoComplete="email"
             className="input input-bordered w-full max-w-xs"
             {...register("email", { required: true, minLength: 5 })}
             required
@@ -71,7 +75,7 @@ const RegisterPage = () => {
           />
         </div>
 
-        <div>
+        {/* <div>
           <label htmlFor="role">Role</label>
           <select
             id="role"
@@ -83,9 +87,9 @@ const RegisterPage = () => {
             <option value="user">Applicant</option>
             <option value="admin">Admin</option>
           </select>
-        </div>
+        </div> */}
 
-        <div>
+        {/* <div>
           <label htmlFor="resume">Resume</label>
           <input
             type="text"
@@ -94,19 +98,30 @@ const RegisterPage = () => {
             className="input input-bordered w-full max-w-xs"
             {...register("resume", { required: false })}
           />
-        </div>
+        </div> */}
 
         <div>
           <label htmlFor="password">Password</label>
           <input
             type="password"
             id="password"
-            placeholder="Enter your password"
             className="input input-bordered w-full max-w-xs"
+            autoComplete="current-password"
             {...register("password", { required: true })}
           />
         </div>
-        {errorMessage && <div className="text-red-500">{errorMessage}</div>}
+        {errors.email && (
+          <div className="text-red-500">Please provide an email.</div>
+        )}
+        {errors.firstName && (
+          <div className="text-red-500">Please provide your first name.</div>
+        )}
+        {errors.lastName && (
+          <div className="text-red-500">Please provide your last name.</div>
+        )}
+        {errors.password && (
+          <div className="text-red-500">Please provide a password.</div>
+        )}
         <button
           type="submit"
           className="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800"

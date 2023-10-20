@@ -117,6 +117,7 @@ export default function Table({ view, data }: Props) {
                     <td className='flex items-center p-4'>
                         <input onClick={(e) => e.stopPropagation()} type='checkbox' />
                     </td>
+
                     {columns.map((column: string, index2: number) => {
                         return <td key={index2} className='p-4 overflow-hidden text-ellipsis whitespace-nowrap'>
                             {renderCell(column, index)}
@@ -160,7 +161,7 @@ export default function Table({ view, data }: Props) {
                         <th className='flex items-center justify-center'>
                             <input type="checkbox" className='p-4' />
                         </th>
-                        {columns.map((c: string, index: number) => {
+                        {columns && columns.map((c: string, index: number) => {
                             return <th key={index} className='p-4'>{c}</th>
                         })}
                         <th>

@@ -9,53 +9,44 @@ import Link from "next/link";
 
 const LoginPage = () => {
   const router = useRouter();
-  const { register, handleSubmit } = useForm();
+  const { register, formState: { errors }, handleSubmit } = useForm();
   const { isLoggedIn, login, logout } = useAuthStore();
   const [errorMessage, setErrorMessage] = useState("");
-
-  // useEffect(() => {
-  //   const data = window.localStorage.getItem("isLoggedIn");
-  //   if (typeof data === "string") {
-  //     logout();
-  //   }
-  // }, []);
 
   const connect = () => {
     window.localStorage.setItem("isLoggedIn", JSON.stringify(true));
     login();
   };
 
-  // useEffect(() => {
-  //   window.localStorage.setItem("isLoggedIn", JSON.stringify(isLoggedIn));
-
-  // }, [isLoggedIn]);
-
   return (
     <div className={styles.container}>
       <form
-        className="form-control w-full max-w-xs"
+        className="form-control w-full max-w-xs bg-slate-800"
         onSubmit={handleSubmit(async (data) => {
           console.log(data);
           try {
             const res = await fetch("http://localhost:8000/auth/login", {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-          if (res.ok) {
-            console.log("logged in");
-            const json = await res.json();
-            console.log("json", json);
-            connect(); //set global isLoggedIn zustand state to true
-            // set id in local storage
-            window.localStorage.setItem("id", json.id);
-            router.push("/");
-          } else {
-            setErrorMessage("Invalid credentials");
-          }
-        } catch (error) {
+              method: "POST",
+              body: JSON.stringify(data),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+            if (res.ok) {
+              console.log("logged in");
+              const json = await res.json();
+              console.log("json", json);
+              connect(); //this connect function change global isLoggedIn zustand state to true and put id in local storage
+              window.localStorage.setItem("id", json.id);
+              if (json.role === "admin") {
+                router.push("/admin");
+              } else {
+                router.push("/");
+              }
+            } else {
+              setErrorMessage("Invalid credentials");
+            }
+          } catch (error) {
             console.log("error creating user:", error);
           }
         })}
@@ -66,6 +57,8 @@ const LoginPage = () => {
           <input
             type="email"
             id="email"
+            autoComplete="email"
+            
             className="input input-bordered w-full max-w-xs"
             {...register("email", { required: true, minLength: 5 })}
             required
@@ -77,12 +70,19 @@ const LoginPage = () => {
           <input
             type="password"
             id="password"
-            placeholder="Enter your password"
+           
+            autoComplete="current-password"
             className="input input-bordered w-full max-w-xs"
             {...register("password", { required: true, minLength: 3 })}
           />
         </div>
         {/* <button type="submit">Register</button> */}
+        {errors.email && (
+          <div className="text-red-500">Please enter an email.</div>
+        )}
+        {errors.password && (
+          <div className="text-red-500">Please enter your password.</div>
+        )}
 
         <button
           type="submit"
