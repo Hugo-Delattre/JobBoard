@@ -54,28 +54,10 @@ export default (
 		try {
 			const [result] = await db.query(
 				`
-				SELECT a.*,
-				(
-					SELECT JSON_OBJECT(
-						'id', c.id,
-						'name', c.name,
-						'sector', c.sector,
-						'representative',
-						(
-							SELECT JSON_OBJECT(
-								'id', u.id,
-								'firstName', u.firstName,
-								'lastName', u.lastName,
-								'email', u.email
-							)
-							FROM users u
-							WHERE u.id = c.representative
-						)
-					)
-					FROM companies c
-					WHERE c.id = a.company
-				) AS company
-			  	FROM advertisements a;
+				SELECT *, a.id, c.name as company
+				FROM advertisements a
+				INNER JOIN companies c
+				ON c.id = a.companyId
 				`
 			);
 			const advertisements = result;
