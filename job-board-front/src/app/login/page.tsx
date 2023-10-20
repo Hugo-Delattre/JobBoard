@@ -1,17 +1,16 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styles from "./index.module.scss";
 import { useForm } from "react-hook-form";
 import { useAuthStore } from "@/app/store/auth-store";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { setCookie } from "@/lib/cookies";
 
 const LoginPage = () => {
   const router = useRouter();
   const { register, formState: { errors }, handleSubmit } = useForm();
-  const { isLoggedIn, login, logout } = useAuthStore();
-  const [errorMessage, setErrorMessage] = useState("");
+  const { login } = useAuthStore();
 
   const connect = () => {
     window.localStorage.setItem("isLoggedIn", JSON.stringify(true));
@@ -21,7 +20,7 @@ const LoginPage = () => {
   return (
     <div className={styles.container}>
       <form
-        className="form-control w-full max-w-xs bg-slate-800"
+        className="w-full max-w-xs form-control bg-slate-800"
         onSubmit={handleSubmit(async (data) => {
           console.log(data);
           try {
@@ -33,33 +32,31 @@ const LoginPage = () => {
               },
             });
             if (res.ok) {
-              console.log("logged in");
               const json = await res.json();
-              console.log("json", json);
               connect(); //this connect function change global isLoggedIn zustand state to true and put id in local storage
+
               window.localStorage.setItem("id", json.id);
+              await setCookie("id", json.id)
+
               if (json.role === "admin") {
                 router.push("/admin");
               } else {
                 router.push("/");
               }
-            } else {
-              setErrorMessage("Invalid credentials");
             }
           } catch (error) {
-            console.log("error creating user:", error);
+            console.log("Error logging in:", error);
           }
         })}
       >
-        {/* <h1>Register</h1> */}
         <div>
           <label htmlFor="email">Email:</label>
           <input
             type="email"
             id="email"
             autoComplete="email"
-            
-            className="input input-bordered w-full max-w-xs"
+
+            className="w-full max-w-xs input input-bordered"
             {...register("email", { required: true, minLength: 5 })}
             required
           />
@@ -70,13 +67,12 @@ const LoginPage = () => {
           <input
             type="password"
             id="password"
-           
+
             autoComplete="current-password"
-            className="input input-bordered w-full max-w-xs"
+            className="w-full max-w-xs input input-bordered"
             {...register("password", { required: true, minLength: 3 })}
           />
         </div>
-        {/* <button type="submit">Register</button> */}
         {errors.email && (
           <div className="text-red-500">Please enter an email.</div>
         )}
@@ -92,14 +88,6 @@ const LoginPage = () => {
             Login
           </span>
         </button>
-        {/* <button
-          onClick={() => {
-            connect();
-            router.push("/");
-          }}
-        >
-          Bypass
-        </button> */}
       </form>
     </div>
   );
