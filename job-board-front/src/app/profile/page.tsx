@@ -48,7 +48,7 @@ const ProfilePage = () => {
 
   return (
     <div className="px-8 mb-8 md:px-32 lg:px-64">
-      <div className="border border-white border-solid border-1 text-lg rounded-lg ">
+      <div className="text-lg border border-white border-solid rounded-lg border-1 ">
         {!("data" in userData) && (
           <div className="flex justify-center my-60">
             <span className="loading loading-spinner loading-lg"></span>
@@ -87,7 +87,7 @@ const ProfilePage = () => {
           >
             <div>
               <div>
-                <div className="p-8 px-22 flex gap-4 flex-col justify-center md:flex-row items-center bg-slate-800 rounded-t-lg">
+                <div className="flex flex-col items-center justify-center gap-4 p-8 rounded-t-lg px-22 md:flex-row bg-slate-800">
                   <Image
                     src={
                       userData.data.profilePicture
@@ -109,7 +109,7 @@ const ProfilePage = () => {
                         First name:
                         <br />
                         <input
-                          className="text-lg rounded-md px-2 bg-slate-900"
+                          className="px-2 text-lg rounded-md bg-slate-900"
                           type="text"
                           defaultValue={userData.data.firstName}
                           {...register("firstName", { required: false })}
@@ -122,7 +122,7 @@ const ProfilePage = () => {
                         <br />
                         <input
                           type="text"
-                          className="text-lg rounded-md px-2 bg-slate-900"
+                          className="px-2 text-lg rounded-md bg-slate-900"
                           defaultValue={userData.data.lastName}
                           {...register("lastName", { required: false })}
                         />
@@ -133,7 +133,7 @@ const ProfilePage = () => {
                       <br />
                       <input
                         type="email"
-                        className="text-lg rounded-md px-2 bg-slate-900"
+                        className="px-2 text-lg rounded-md bg-slate-900"
                         defaultValue={userData.data.email}
                         {...register("email", { required: false })}
                       />
@@ -146,7 +146,7 @@ const ProfilePage = () => {
                       <br />
                       <input
                         type="text"
-                        className="text-lg rounded-md px-2 bg-slate-900"
+                        className="px-2 text-lg rounded-md bg-slate-900"
                         defaultValue={userData.data.profilePicture}
                         {...register("profilePicture", {
                           required: false,
@@ -156,7 +156,7 @@ const ProfilePage = () => {
                       />
                     </label>
                     {errors.profilePicture && (
-                      <span className="text-red-500 text-xs">
+                      <span className="text-xs text-red-500">
                         Profile picture must be a valid image URL
                       </span>
                     )}
@@ -165,7 +165,7 @@ const ProfilePage = () => {
               </div>
             </div>
             <div>
-              <div className="border border-white border-solid rounded-b-lg bg-slate-800 flex justify-center py-2 bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800">
+              <div className="flex justify-center py-2 border border-white border-solid rounded-b-lg bg-slate-800 bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800">
                 <button onClick={() => setIsEditing(true)} className="">
                   <LiaSaveSolid className="w-6 h-6" />
                 </button>
@@ -177,7 +177,7 @@ const ProfilePage = () => {
           <div>
             <div>
               <div>
-                <div className="p-8 px-22 flex gap-4 flex-col justify-center md:flex-row items-center bg-slate-800 rounded-t-lg">
+                <div className="flex flex-col items-center justify-center gap-4 p-8 rounded-t-lg px-22 md:flex-row bg-slate-800">
                   <Image
                     src={
                       userData.data.profilePicture
@@ -194,7 +194,7 @@ const ProfilePage = () => {
                     }
                   />
                   <div>
-                    <p className="text-4xl mb-2 font-semibold">
+                    <p className="mb-2 text-4xl font-semibold">
                       {userData.data.firstName} {userData.data.lastName}
                     </p>
 
@@ -206,7 +206,7 @@ const ProfilePage = () => {
               </div>
             </div>
             <div className="">
-              <div className="border border-white border-solid rounded-b-lg bg-slate-800 flex justify-center py-2 bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800">
+              <div className="flex justify-center py-2 border border-white border-solid rounded-b-lg bg-slate-800 bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800">
                 <button onClick={() => setIsEditing(true)} className="">
                   <LiaEditSolid className="w-6 h-6" />
                 </button>
