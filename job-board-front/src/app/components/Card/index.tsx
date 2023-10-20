@@ -4,54 +4,74 @@ import { useState } from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { useAuthStore } from "@/app/store/auth-store";
+import { Advertisement } from "@/app/page";
+import { getProfileId } from "@/app/utils/auth";
 
 import styles from "./index.module.scss";
-
-interface Card {
-  id: number;
-  title: string;
-  description: string;
-  company: string;
-  salary?: number;
-  working_hours: number;
-  images?: string[];
-  active?: boolean;
-  publish_date?: Date;
-  location: string;
-  type: string;
-}
 
 const Card = ({
   id,
   title,
   description,
   company,
+  sector,
   salary,
-  working_hours,
+  workingHours,
   active,
-  publish_date,
+  publishDate,
   images,
   location,
   type,
-}: Card) => {
+}: Advertisement) => {
   const { register, handleSubmit } = useForm();
 
   const shortDescription = description.slice(0, 70);
   const [isApplying, setIsApplying] = useState(false);
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const { isLoggedIn } = useAuthStore();
 
+  const handlerRegister = async (data: any) => {
+    const userId = getProfileId();
+    if (!userId) {
+      data.advertisementId = id;
+      console.log(data);
+      const res = await fetch("http://localhost:8000/applications", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const json = await res.json();
+      console.log(json);
+      setIsSubmitted(true);
+      return;
+    } else {
+      const userRes = await fetch("http://localhost:8000/users/" + userId);
+      const userJson = await userRes.json();
+      console.log("userJson", userJson);
+      data.advertisementId = id;
+      data.firstName = userJson.data.firstName;
+      data.lastName = userJson.data.lastName;
+      data.email = userJson.data.email;
+      console.log(data);
+      const res = await fetch("http://localhost:8000/applications", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const json = await res.json();
+      console.log(json);
+      setIsSubmitted(true);
+    }
+  };
+
+  // bg-base-200 or bg-slate-800 or bg-gray-800 or border border-white border-solid border-1
+
   return (
-    // <div className={styles.main}>
-    //   <div className={styles.border}>
-    //     <div className={styles.main_info}>
-    //       <h3 className={styles.title}>{title}</h3>
-    //       <p className={styles.description}>{description}</p>
-    //     </div>
-    //     <button>Learn more</button>
-    //   </div>
-    // </div>
-    <div className="collapse bg-base-200">
+    <div className="collapse  bg-gray-900  border border-white border-solid border-1">
       <input type="checkbox" className={styles.checkbox} />
       <div className="collapse-title text-xl font-medium flex justify-between">
         <div>
@@ -59,33 +79,31 @@ const Card = ({
           <p className={styles.description}>{shortDescription}...</p>
         </div>
         <button className="cursor-pointer text-xs border-gray-50">
-          Click
-          <br /> to see
+          Click to
           <br />
-          more
+          learn more
         </button>
       </div>
       <div className="collapse-content">
         <div className={styles.collapseContent}>
           <div className={styles.collapseContentLeft}>
-            <p>{description}</p>
+            <p className="w-11/12">{description}</p>
             <p>Company: {company}</p>
-            <p>Salary: {salary}$</p>
-            <p>Working hours: {working_hours}</p>
             <p>Location: {location}</p>
+            <p>Sector: {sector}</p>
             <p>Type: {type}</p>
+            <p>Working hours: {workingHours}</p>
+            <p>Salary: {salary}$/h</p>
             {/* <p>{active}</p> */}
-            {/* <p>{publish_date}</p> */}
             {/* <p>{publish_date}</p> */}
           </div>
           <div className={styles.collapseContentRight}>
             <button
-              // href={`/apply/${id}`}
               onClick={() => setIsApplying(!isApplying)}
               className="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800"
             >
               <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-                {!isApplying ? "Apply" : "Cancel"}
+                {!isApplying ? "Apply" : "Close"}
               </span>
             </button>
           </div>
@@ -93,92 +111,30 @@ const Card = ({
         {isApplying && (
           <div className={`${styles.collapseContent} ${styles.applyingForm}`}>
             <div className={styles.container}>
-              {isLoggedIn ? (
+              {isLoggedIn && !isSubmitted && (
                 <form
                   className="form-control w-full max-w-xs"
-                  onSubmit={handleSubmit(async (data) => {
-                    console.log(data);
-                    // const res = await fetch(
-                    //   "http://localhost:3000/api/register",
-                    //   {
-                    //     method: "POST",
-                    //     body: JSON.stringify(data),
-                    //     headers: {
-                    //       "Content-Type": "application/json",
-                    //     },
-                    //   }
-                    // );
-                    // const json = await res.json();
-                    // console.log(json);
-                  })}
+                  onSubmit={handleSubmit(handlerRegister)}
                 >
-                  {/* <h1>Register</h1> */}
                   {/* <div>
-                    <label htmlFor="email">Email:</label>
-                    <input
-                      type="email"
-                      id="email"
-                      className="input input-bordered w-full max-w-xs"
-                      {...register("email", { required: true, minLength: 5 })}
-                      required
-                    />
-                  </div> */}
-
-                  {/* <div>
-                    <label htmlFor="firstName">First Name:</label>
-                    <input
-                      type="firstName"
-                      id="firstName"
-                      className="input input-bordered w-full max-w-xs"
-                      {...register("firstName", {
-                        required: true,
-                        minLength: 5,
-                      })}
-                    />
-                  </div> */}
-
-                  {/* <div>
-                    <label htmlFor="lastName">Last Name</label>
-                    <input
-                      type="lastName"
-                      id="lastName"
-                      className="input input-bordered w-full max-w-xs"
-                      {...register("lastName", {
-                        required: true,
-                        minLength: 5,
-                      })}
-                    />
-                  </div> */}
-
-                  {/* <div>
-                  <label htmlFor="username">Username</label>
-                  <input
-                    type="text"
-                    id="username"
-                    className="input input-bordered w-full max-w-xs"
-                    {...register("username", { required: true, minLength: 5 })}
-                  />
-                </div> */}
-
-                  <div>
-                    <label htmlFor="resume">Resume</label>
+                    <label htmlFor="resume">Resume:</label>
                     <input
                       type="text"
                       id="resume"
                       placeholder="Enter URL of your resume"
                       className="input input-bordered w-full max-w-xs"
-                      {...register("resume", { required: true, minLength: 5 })}
+                      {...register("resume", { required: true })}
                     />
-                  </div>
+                  </div> */}
 
                   <div>
-                    <label htmlFor="resume">Message</label>
+                    <label htmlFor="message">Message:</label>
                     <input
                       type="textarea"
-                      id="resume"
+                      id="message"
                       placeholder="Enter your motivation letter"
                       className="input input-bordered w-full max-w-xs"
-                      {...register("resume", { required: true, minLength: 5 })}
+                      {...register("message", { required: true })}
                     />
                   </div>
 
@@ -191,93 +147,67 @@ const Card = ({
                     </span>
                   </button>
                 </form>
-              ) : (
+              )}
+
+              {!isLoggedIn && !isSubmitted && (
                 <>
                   <form
                     className="form-control w-full max-w-xs"
-                    onSubmit={handleSubmit(async (data) => {
-                      console.log(data);
-                      // const res = await fetch(
-                      //   "http://localhost:3000/api/register",
-                      //   {
-                      //     method: "POST",
-                      //     body: JSON.stringify(data),
-                      //     headers: {
-                      //       "Content-Type": "application/json",
-                      //     },
-                      //   }
-                      // );
-                      // const json = await res.json();
-                      // console.log(json);
-                    })}
+                    onSubmit={handleSubmit(handlerRegister)}
                   >
-                    {/* <h1>Register</h1> */}
+                    <div>
+                      <label htmlFor="firstName">First name:</label>
+                      <input
+                        type="text"
+                        id="text"
+                        placeholder="Enter your first name"
+                        className="input input-bordered w-full max-w-xs"
+                        {...register("firstName", { required: true })}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="lastName">Last name:</label>
+                      <input
+                        type="text"
+                        id="text"
+                        placeholder="Enter your last name"
+                        className="input input-bordered w-full max-w-xs"
+                        {...register("lastName", { required: true })}
+                        required
+                      />
+                    </div>
                     <div>
                       <label htmlFor="email">Email:</label>
                       <input
                         type="email"
                         id="email"
+                        placeholder="Enter your email"
                         className="input input-bordered w-full max-w-xs"
-                        {...register("email", { required: true, minLength: 5 })}
+                        {...register("email", { required: true })}
                         required
                       />
                     </div>
-                    <div>
-                      <label htmlFor="firstName">First Name:</label>
-                      <input
-                        type="firstName"
-                        id="firstName"
-                        className="input input-bordered w-full max-w-xs"
-                        {...register("firstName", {
-                          required: true,
-                          minLength: 5,
-                        })}
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="lastName">Last Name</label>
-                      <input
-                        type="lastName"
-                        id="lastName"
-                        className="input input-bordered w-full max-w-xs"
-                        {...register("lastName", {
-                          required: true,
-                          minLength: 5,
-                        })}
-                      />
-                    </div>
-                    {/* <div>
-                    <label htmlFor="username">Username</label>
-                    <input
-                      type="text"
-                      id="username"
-                      className="input input-bordered w-full max-w-xs"
-                      {...register("username", { required: true, minLength: 5 })}
-                    />
-                  </div> */}
-                    <div>
-                      <label htmlFor="resume">Resume</label>
+                    {/* <div className="hidden">
+                      <label htmlFor="lastName">Last name:</label>
                       <input
                         type="text"
-                        id="resume"
-                        placeholder="Enter URL of your resume"
+                        id="applicationId"
+                        defaultValue={id}
                         className="input input-bordered w-full max-w-xs"
-                        {...register("resume", {
-                          required: true,
-                          minLength: 5,
-                        })}
+                        {...register("advertisementId", { required: true })}
+                        required
                       />
-                    </div>
+                    </div> */}
                     <div>
-                      <label htmlFor="resume">Message</label>
+                      <label htmlFor="message">Message:</label>
                       <input
                         type="textarea"
-                        id="resume"
+                        id="message"
                         placeholder="Enter your motivation letter"
                         className="input input-bordered w-full max-w-xs"
-                        {...register("resume", {
+                        {...register("message", {
                           required: true,
-                          minLength: 5,
                         })}
                       />
                     </div>
@@ -291,13 +221,16 @@ const Card = ({
                     </button>
                   </form>
                   <p className="opacity-50">
-                    Register to avoid filling your details each time.
+                    Register to avoid filling your email each time.
                   </p>
                 </>
               )}
-              {/* {!isLoggedIn && (
-                
-              )} */}
+
+              {isSubmitted && (
+                <div className="text-center">
+                  <p className="text-green-500">Application sent!</p>
+                </div>
+              )}
             </div>
           </div>
         )}

@@ -1,51 +1,51 @@
-import Image from "next/image";
-import Link from "next/link";
-// import styles from "./page.module.css";
-
 import Card from "./components/Card";
-import { title } from "process";
 
-const mockCardData = [
-  {
-    id: 1,
-    title: "Développeur web Next.js Express.js",
-    description:
-      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Deleniti, unde.",
-    company: "Google",
-    salary: 30000,
-    working_hours: 35,
-    active: true,
-    publish_date: new Date(),
-    images: [
-      "https://images.unsplash.com/photo-1622839686941-1a7b3c6a9a8b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8ZGV2ZWxvcG1lbnR8ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80",
-    ],
-    location: "Paris",
-    type: "CDI",
-  },
-  {
-    id: 2,
-    title: "Ingénieur full stack JAVA",
-    description:
-      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Deleniti, unde.",
-    company: "Google",
-    salary: 30000,
-    working_hours: 35,
-    active: true,
-    publish_date: new Date(),
-    images: [
-      "https://images.unsplash.com/photo-1622839686941-1a7b3c6a9a8b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8ZGV2ZWxvcG1lbnR8ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80",
-    ],
-    location: "Bordeaux",
-    type: "CDI"
-  },
-];
+export interface Advertisement {
+  id: number;
+  title: string;
+  description: string;
+  company: string;
+  salary?: number;
+  workingHours: number;
+  sector: string;
+  images?: string[];
+  active?: boolean;
+  publishDate?: Date;
+  location: string;
+  type: string;
+}
 
-export default function Home() {
+const fetchAdvertisements = async (): Promise<Advertisement[] | null> => {
+  try {
+    const response = await fetch("http://localhost:8000/advertisements")
+
+    if (response.status === 200) {
+      const { data } = await response.json()
+      return data
+    }
+    else {
+      throw new Error("Failed to retrieve advertisements.")
+    }
+  } catch (error) {
+    console.log(error)
+  }
+
+  return null;
+}
+
+export default async function Home() {
+  const advertisements = await fetchAdvertisements()
+
   return (
-    <main className="align-middle justify-between items-center">
-      {/* <h2>Le job de vos rêves est à portée de clic</h2> */}
-      <div className="flex gap-8 flex-col mb-8">
-        {mockCardData.map((card) => {
+    <main className="items-center justify-between align-middle">
+      <div className="flex flex-col gap-8 mb-8">
+        {/* {loading && (
+          <div className="flex justify-center my-60">
+            <span className="loading loading-spinner loading-lg"></span>
+          </div>
+        )} */}
+
+        {advertisements?.map((card: Advertisement) => {
           return (
             <Card
               key={card.id}
@@ -54,43 +54,17 @@ export default function Home() {
               description={card.description}
               company={card.company}
               salary={card.salary}
-              working_hours={card.working_hours}
+              workingHours={card.workingHours}
               active={card.active}
-              publish_date={card.publish_date}
+              publishDate={card.publishDate}
+              sector={card.sector}
               images={card.images}
               location={card.location}
               type={card.type}
             />
           );
         })}
-
-        {/* <Card
-          title="Développeur web Next.js Express.js"
-          description="Lorem ipsum, dolor sit amet consectetur adipisicing elit. Deleniti, unde."
-        /> */}
-        {/* <Card
-          title="Ingénieur full stack JAVA"
-          description="Passionné.e par le développement logiciel, vous détenez un Bac+5 avec au moins 1 an d’expérience réussie en développement web sur une stack JAVA, Spring, framework Javascript (Angular, Vue.js) ?"
-        />
-        <Card
-          title="Développeur web Next.js Express.js"
-          description="Lorem ipsum, dolor sit amet consectetur adipisicing elit. Deleniti, unde."
-        />
-        <Card
-          title="Ingénieur full stack JAVA"
-          description="Passionné.e par le développement logiciel, vous détenez un Bac+5 avec au moins 1 an d’expérience réussie en développement web sur une stack JAVA, Spring, framework Javascript (Angular, Vue.js) ?"
-        />
-        <Card title="titre3" description="test3" />
-        <Card title="titre3" description="test3" />
-
-        <Card title="titre3" description="test3" />
-
-        <Card title="titre3" description="test3" />
-        <Card title="titre3" description="test3" />
-        <Card title="titre3" description="test3" />
-        <Card title="titre3" description="test3" /> */}
       </div>
-      <div className="flex gap-8 flex-col mb-8"></div>
     </main>
   );
 }

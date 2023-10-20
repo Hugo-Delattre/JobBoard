@@ -1,62 +1,62 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styles from "./index.module.scss";
 import { useForm } from "react-hook-form";
 import { useAuthStore } from "@/app/store/auth-store";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { setCookie } from "@/lib/cookies";
 
 const LoginPage = () => {
   const router = useRouter();
-  const { register, handleSubmit } = useForm();
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const { isLoggedIn, login, logout } = useAuthStore();
-
-  useEffect(() => {
-    const data = window.localStorage.getItem("isLoggedIn");
-    if (typeof data === "string") {
-      logout();
-    }
-  }, []);
+  const { register, formState: { errors }, handleSubmit } = useForm();
+  const { login } = useAuthStore();
 
   const connect = () => {
     window.localStorage.setItem("isLoggedIn", JSON.stringify(true));
     login();
   };
 
-  // useEffect(() => {
-  //   window.localStorage.setItem("isLoggedIn", JSON.stringify(isLoggedIn));
-
-  // }, [isLoggedIn]);
-
   return (
     <div className={styles.container}>
       <form
-        className="form-control w-full max-w-xs"
+        className="w-full max-w-xs form-control bg-slate-800"
         onSubmit={handleSubmit(async (data) => {
           console.log(data);
-          const res = await fetch("http://localhost:3000/api/register", {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-          const json = await res.json();
-          console.log(json);
-          // Here setup the req res to the backend and call login() if credentials matches.
-          // connect();
-          // router.push("/");
+          try {
+            const res = await fetch("http://localhost:8000/auth/login", {
+              method: "POST",
+              body: JSON.stringify(data),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+            if (res.ok) {
+              const json = await res.json();
+              connect(); //this connect function change global isLoggedIn zustand state to true and put id in local storage
+
+              window.localStorage.setItem("id", json.id);
+              await setCookie("id", json.id)
+
+              if (json.role === "admin") {
+                router.push("/admin");
+              } else {
+                router.push("/");
+              }
+            }
+          } catch (error) {
+            console.log("Error logging in:", error);
+          }
         })}
       >
-        {/* <h1>Register</h1> */}
         <div>
           <label htmlFor="email">Email:</label>
           <input
             type="email"
             id="email"
-            className="input input-bordered w-full max-w-xs"
+            autoComplete="email"
+
+            className="w-full max-w-xs input input-bordered"
             {...register("email", { required: true, minLength: 5 })}
             required
           />
@@ -67,12 +67,17 @@ const LoginPage = () => {
           <input
             type="password"
             id="password"
-            placeholder="Enter your password"
-            className="input input-bordered w-full max-w-xs"
-            {...register("password", { required: true, minLength: 5 })}
+            autoComplete="current-password"
+            className="w-full max-w-xs input input-bordered"
+            {...register("password", { required: true, minLength: 3 })}
           />
         </div>
-        {/* <button type="submit">Register</button> */}
+        {errors.email && (
+          <div className="text-red-500">Please enter an email.</div>
+        )}
+        {errors.password && (
+          <div className="text-red-500">Please enter your password.</div>
+        )}
 
         <button
           type="submit"
@@ -81,14 +86,6 @@ const LoginPage = () => {
           <span className="relative px-5 py-2.5 transition-all ease-in duration-75  rounded-md group-hover:bg-opacity-0">
             Login
           </span>
-        </button>
-        <button
-          onClick={() => {
-            connect();
-            router.push("/");
-          }}
-        >
-          Bypass
         </button>
       </form>
     </div>
