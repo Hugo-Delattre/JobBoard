@@ -1,12 +1,4 @@
-"use client";
-
-import Image from "next/image";
-import Link from "next/link";
-// import styles from "./page.module.css";
-
 import Card from "./components/Card";
-import { title } from "process";
-import { useEffect, useState } from "react";
 
 export interface Advertisement {
   id: number;
@@ -22,34 +14,37 @@ export interface Advertisement {
   type: string;
 }
 
-export default function Home() {
-  const [advertisements, setAdvertisements] = useState<Advertisement[]>([]);
+const fetchAdvertisements = async (): Promise<Advertisement[] | null> => {
+  try {
+    const response = await fetch("http://localhost:8000/advertisements")
 
-  useEffect(() => {
-    fetch("http://localhost:8000/advertisements")
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return res.json();
-      })
-      .then((data) => {
-        console.log(data.data);
-        setAdvertisements(data.data);
-      })
-      .catch((error) => console.error("Error fetching data:", error));
-  }, []);
+    if (response.status === 200) {
+      const { data } = await response.json()
+      return data
+    }
+    else {
+      throw new Error("Failed to retrieve advertisements.")
+    }
+  } catch (error) {
+    console.log(error)
+  }
+
+  return null;
+}
+
+export default async function Home() {
+  const advertisements = await fetchAdvertisements()
 
   return (
-    <main className="align-middle justify-between items-center">
-      <div className="flex gap-8 flex-col mb-8">
-        {advertisements.length === 0 && (
+    <main className="items-center justify-between align-middle">
+      <div className="flex flex-col gap-8 mb-8">
+        {/* {loading && (
           <div className="flex justify-center my-60">
             <span className="loading loading-spinner loading-lg"></span>
           </div>
-        )}
+        )} */}
 
-        {advertisements.map((card) => {
+        {advertisements?.map((card: Advertisement) => {
           return (
             <Card
               key={card.id}
