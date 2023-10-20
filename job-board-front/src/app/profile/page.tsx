@@ -15,7 +15,7 @@ interface UserData {
     id: number;
     role: string;
     // gender: string;
-    // profilePicture: number;
+    profilePicture: string;
     // resume: number;
   };
 }
@@ -85,11 +85,19 @@ const ProfilePage = () => {
               <div>
                 <div className="p-8 px-22 flex gap-4 flex-col justify-center md:flex-row items-center bg-slate-800 rounded-t-lg">
                   <Image
-                    src="https://cdn.discordapp.com/attachments/1081136403137712150/1082991411340791958/TravelSquadDefaultUserImage.webp?ex=65423959&is=652fc459&hm=24958223005562882e48ab9037a3230c40bfd930b5085c0ebdc479d5100f1181&"
+                    src={
+                      userData.data.profilePicture
+                        ? userData.data.profilePicture
+                        : "https://cdn.discordapp.com/attachments/1081136403137712150/1082991411340791958/TravelSquadDefaultUserImage.webp?ex=65423959&is=652fc459&hm=24958223005562882e48ab9037a3230c40bfd930b5085c0ebdc479d5100f1181&"
+                    }
                     alt="profile picture"
                     width={200}
                     height={200}
-                    className="filter brightness-0 invert"
+                    className={
+                      userData.data.profilePicture
+                        ? "rounded-full border-2 border-white border-solid mr-3"
+                        : "filter brightness-0 invert"
+                    }
                   />
                   <div className="flex flex-col gap-4">
                     <div>
@@ -126,12 +134,20 @@ const ProfilePage = () => {
                         {...register("email", { required: false })}
                       />
                     </label>
-                    {/* <p>User ID: {userData.data.id}</p>
-                    <input
-                      type="hidden"
-                      value={userData.data.id}
-                      {...register("id", { required: true })}
-                    /> */}
+                    <label className="text-sm">
+                      Profile picture:
+                      <br />
+                      <input
+                        type="text"
+                        className="text-lg rounded-md px-2 bg-slate-900"
+                        defaultValue={userData.data.profilePicture}
+                        {...register("profilePicture", {
+                          required: false,
+                          pattern:
+                            /\.(jpg|jpeg|png|gif|webp)(\?.*)?$|^https?:\/\/.+/i,
+                        })}
+                      />
+                    </label>
                   </div>
                 </div>
               </div>
@@ -151,11 +167,19 @@ const ProfilePage = () => {
               <div>
                 <div className="p-8 px-22 flex gap-4 flex-col justify-center md:flex-row items-center bg-slate-800 rounded-t-lg">
                   <Image
-                    src="https://cdn.discordapp.com/attachments/1081136403137712150/1082991411340791958/TravelSquadDefaultUserImage.webp?ex=65423959&is=652fc459&hm=24958223005562882e48ab9037a3230c40bfd930b5085c0ebdc479d5100f1181&"
+                    src={
+                      userData.data.profilePicture
+                        ? userData.data.profilePicture
+                        : "https://cdn.discordapp.com/attachments/1081136403137712150/1082991411340791958/TravelSquadDefaultUserImage.webp?ex=65423959&is=652fc459&hm=24958223005562882e48ab9037a3230c40bfd930b5085c0ebdc479d5100f1181&"
+                    }
                     alt="profile picture"
                     width={200}
                     height={200}
-                    className="filter brightness-0 invert"
+                    className={
+                      userData.data.profilePicture
+                        ? "rounded-full border-2 border-white border-solid mr-3"
+                        : "filter brightness-0 invert"
+                    }
                   />
                   <div>
                     <p className="text-4xl mb-2 font-semibold">

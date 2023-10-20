@@ -6,6 +6,8 @@ import { useAuthStore } from "@/app/store/auth-store";
 import { useRouter } from "next/navigation";
 import ButtonLight from "../Buttons/ButtonLight";
 import Button from "../Buttons/Button";
+import { BiLogOut } from "react-icons/bi";
+
 
 
 import styles from "./index.module.scss";
@@ -56,6 +58,7 @@ const NavBar = () => {
               </span>
             </button>
             <Button text="My Profile" url="/profile" />
+            
           </div>
         )}
       </nav>
