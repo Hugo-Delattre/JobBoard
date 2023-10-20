@@ -25,7 +25,11 @@ const ProfilePage = () => {
   const [userData, setUserData] = useState<UserData | {}>({});
   const [isEditing, setIsEditing] = useState(false);
   const [editableUserData, setEditableUserData] = useState<UserData | {}>({});
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm();
 
   useEffect(() => {
     const userId = getProfileId();
@@ -133,6 +137,9 @@ const ProfilePage = () => {
                         defaultValue={userData.data.email}
                         {...register("email", { required: false })}
                       />
+                      {errors.email && (
+                        <span className="text-red-500">Email is required</span>
+                      )}
                     </label>
                     <label className="text-sm">
                       Profile picture:
@@ -148,6 +155,11 @@ const ProfilePage = () => {
                         })}
                       />
                     </label>
+                    {errors.profilePicture && (
+                      <span className="text-red-500 text-xs">
+                        Profile picture must be a valid image URL
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>

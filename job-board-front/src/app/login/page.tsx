@@ -9,7 +9,7 @@ import Link from "next/link";
 
 const LoginPage = () => {
   const router = useRouter();
-  const { register, handleSubmit } = useForm();
+  const { register, formState: { errors }, handleSubmit } = useForm();
   const { isLoggedIn, login, logout } = useAuthStore();
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -58,6 +58,7 @@ const LoginPage = () => {
             type="email"
             id="email"
             autoComplete="email"
+            
             className="input input-bordered w-full max-w-xs"
             {...register("email", { required: true, minLength: 5 })}
             required
@@ -69,12 +70,19 @@ const LoginPage = () => {
           <input
             type="password"
             id="password"
+           
             autoComplete="current-password"
             className="input input-bordered w-full max-w-xs"
             {...register("password", { required: true, minLength: 3 })}
           />
         </div>
         {/* <button type="submit">Register</button> */}
+        {errors.email && (
+          <div className="text-red-500">Please enter an email.</div>
+        )}
+        {errors.password && (
+          <div className="text-red-500">Please enter your password.</div>
+        )}
 
         <button
           type="submit"
