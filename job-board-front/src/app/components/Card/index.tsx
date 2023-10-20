@@ -14,10 +14,11 @@ const Card = ({
   title,
   description,
   company,
+  sector,
   salary,
-  working_hours,
+  workingHours,
   active,
-  publish_date,
+  publishDate,
   images,
   location,
   type,
@@ -32,6 +33,7 @@ const Card = ({
   const handlerRegister = async (data: any) => {
     const userId = getProfileId();
     if (!userId) {
+      data.advertisementId = id;
       console.log(data);
       const res = await fetch("http://localhost:8000/applications", {
         method: "POST",
@@ -45,8 +47,13 @@ const Card = ({
       setIsSubmitted(true);
       return;
     } else {
-      console.log("userId", userId);
-      data.applicant = userId;
+      const userRes = await fetch("http://localhost:8000/users/" + userId);
+      const userJson = await userRes.json();
+      console.log("userJson", userJson);
+      data.advertisementId = id;
+      data.firstName = userJson.data.firstName;
+      data.lastName = userJson.data.lastName;
+      data.email = userJson.data.email;
       console.log(data);
       const res = await fetch("http://localhost:8000/applications", {
         method: "POST",
@@ -81,11 +88,12 @@ const Card = ({
         <div className={styles.collapseContent}>
           <div className={styles.collapseContentLeft}>
             <p className="w-11/12">{description}</p>
-            {/* <p>Company: {company}</p> */}
+            <p>Company: {company}</p>
             <p>Location: {location}</p>
+            <p>Sector: {sector}</p>
             <p>Type: {type}</p>
-            <p>Working hours: {working_hours}</p>
-            <p>Salary: {salary}$</p>
+            <p>Working hours: {workingHours}</p>
+            <p>Salary: {salary}$/h</p>
             {/* <p>{active}</p> */}
             {/* <p>{publish_date}</p> */}
           </div>
@@ -108,7 +116,7 @@ const Card = ({
                   className="form-control w-full max-w-xs"
                   onSubmit={handleSubmit(handlerRegister)}
                 >
-                  <div>
+                  {/* <div>
                     <label htmlFor="resume">Resume:</label>
                     <input
                       type="text"
@@ -117,13 +125,13 @@ const Card = ({
                       className="input input-bordered w-full max-w-xs"
                       {...register("resume", { required: true })}
                     />
-                  </div>
+                  </div> */}
 
                   <div>
-                    <label htmlFor="resume">Message:</label>
+                    <label htmlFor="message">Message:</label>
                     <input
                       type="textarea"
-                      id="resume"
+                      id="message"
                       placeholder="Enter your motivation letter"
                       className="input input-bordered w-full max-w-xs"
                       {...register("message", { required: true })}
@@ -148,6 +156,28 @@ const Card = ({
                     onSubmit={handleSubmit(handlerRegister)}
                   >
                     <div>
+                      <label htmlFor="firstName">First name:</label>
+                      <input
+                        type="text"
+                        id="text"
+                        placeholder="Enter your first name"
+                        className="input input-bordered w-full max-w-xs"
+                        {...register("firstName", { required: true })}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="lastName">Last name:</label>
+                      <input
+                        type="text"
+                        id="text"
+                        placeholder="Enter your last name"
+                        className="input input-bordered w-full max-w-xs"
+                        {...register("lastName", { required: true })}
+                        required
+                      />
+                    </div>
+                    <div>
                       <label htmlFor="email">Email:</label>
                       <input
                         type="email"
@@ -158,23 +188,22 @@ const Card = ({
                         required
                       />
                     </div>
-                    <div>
-                      <label htmlFor="resume">Resume:</label>
+                    {/* <div className="hidden">
+                      <label htmlFor="lastName">Last name:</label>
                       <input
                         type="text"
-                        id="resume"
-                        placeholder="Enter URL of your resume"
+                        id="applicationId"
+                        defaultValue={id}
                         className="input input-bordered w-full max-w-xs"
-                        {...register("resume", {
-                          required: true,
-                        })}
+                        {...register("advertisementId", { required: true })}
+                        required
                       />
-                    </div>
+                    </div> */}
                     <div>
                       <label htmlFor="message">Message:</label>
                       <input
                         type="textarea"
-                        id="resume"
+                        id="message"
                         placeholder="Enter your motivation letter"
                         className="input input-bordered w-full max-w-xs"
                         {...register("message", {

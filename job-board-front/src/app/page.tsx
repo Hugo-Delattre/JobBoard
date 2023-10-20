@@ -6,10 +6,11 @@ export interface Advertisement {
   description: string;
   company: string;
   salary?: number;
-  working_hours: number;
+  workingHours: number;
+  sector: string;
   images?: string[];
   active?: boolean;
-  publish_date?: Date;
+  publishDate?: Date;
   location: string;
   type: string;
 }
@@ -53,9 +54,10 @@ export default async function Home() {
               description={card.description}
               company={card.company}
               salary={card.salary}
-              working_hours={card.working_hours}
+              workingHours={card.workingHours}
               active={card.active}
-              publish_date={card.publish_date}
+              publishDate={card.publishDate}
+              sector={card.sector}
               images={card.images}
               location={card.location}
               type={card.type}

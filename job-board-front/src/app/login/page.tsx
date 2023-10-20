@@ -67,7 +67,6 @@ const LoginPage = () => {
           <input
             type="password"
             id="password"
-
             autoComplete="current-password"
             className="w-full max-w-xs input input-bordered"
             {...register("password", { required: true, minLength: 3 })}
