@@ -11,14 +11,6 @@ export default (db: Connection) => {
 			for (let i = 0; i < number; i++) {
 				const user = {};
 
-				const response = await fetch(faker.internet.avatar());
-				const blob = await response.blob();
-
-				const data = await blob.arrayBuffer();
-
-				const base64 = Buffer.from(data).toString("base64");
-				const base64Url = `data:${blob.type};base64,${base64}`;
-
 				users.push(
 					Object.assign(user, {
 						firstName: faker.person.firstName(),
@@ -27,7 +19,7 @@ export default (db: Connection) => {
 						email: faker.internet.email(),
 						password: faker.internet.password(),
 						role: faker.helpers.arrayElement(["user", "admin"]),
-						profilePicture: base64Url,
+						profilePicture: faker.internet.avatar(),
 					})
 				);
 

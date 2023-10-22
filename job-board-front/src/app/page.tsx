@@ -5,11 +5,10 @@ export interface Advertisement {
   title: string;
   description: string;
   company: string;
-  salary?: number;
-  working_hours: number;
-  images?: string[];
-  active?: boolean;
-  publish_date?: Date;
+  salary: number;
+  workingHours: number;
+  active: boolean;
+  publishDate: Date;
   location: string;
   type: string;
 }
@@ -38,27 +37,20 @@ export default async function Home() {
   return (
     <main className="items-center justify-between align-middle">
       <div className="flex flex-col gap-8 mb-8">
-        {/* {loading && (
-          <div className="flex justify-center my-60">
-            <span className="loading loading-spinner loading-lg"></span>
-          </div>
-        )} */}
-
-        {advertisements?.map((card: Advertisement) => {
+        {advertisements?.map((ad: Advertisement) => {
           return (
             <Card
-              key={card.id}
-              id={card.id}
-              title={card.title}
-              description={card.description}
-              company={card.company}
-              salary={card.salary}
-              working_hours={card.working_hours}
-              active={card.active}
-              publish_date={card.publish_date}
-              images={card.images}
-              location={card.location}
-              type={card.type}
+              key={ad.id}
+              id={ad.id}
+              title={ad.title}
+              description={ad.description}
+              company={ad.company}
+              salary={ad.salary}
+              workingHours={ad.workingHours}
+              active={ad.active}
+              publishDate={ad.publishDate}
+              location={ad.location}
+              type={ad.type}
             />
           );
         })}

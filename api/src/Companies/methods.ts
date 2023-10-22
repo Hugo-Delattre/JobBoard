@@ -9,20 +9,13 @@ export default (
 
 		try {
 			const [result] = await db.query(
-				`SELECT c.*,
-				(
-				  SELECT JSON_OBJECT(
-					'id', u.id,
-					'firstName', u.firstName,
-					'lastName', u.lastName,
-					'email', u.email,
-					'company', u.company
-				  )
-				  FROM users u
-				  WHERE u.id = c.representative
-				) AS representative
-			  FROM companies c
-			  WHERE c.id = ${id};`
+				`
+				SELECT *, c.id
+				FROM companies c
+				LEFT JOIN users u
+				ON u.id = c.userId
+			  	WHERE c.id = ${id};
+				`
 			);
 
 			const company = result[0 as keyof typeof result];
@@ -35,7 +28,14 @@ export default (
 
 	const getCompanies = async (req: Request, res: Response): Promise<void> => {
 		try {
-			const [result] = await db.query("SELECT * FROM companies;");
+			const [result] = await db.query(
+				`
+				SELECT *
+				FROM companies c
+				LEFT JOIN users as u
+				ON u.id = c.userId;
+				`
+			);
 			const companies = result;
 			res.status(200).json({ data: companies });
 		} catch (error) {
@@ -49,7 +49,19 @@ export default (
 
 		try {
 			const [status] = await db.query(
-				`INSERT INTO companies (name, sector, representative) VALUES ("${name}", "${sector}", "${representative}");`
+				`INSERT INTO companies
+				(
+					name,
+					sector,
+					representative
+				)
+				VALUES
+				(
+					"${name}",
+					"${sector}",
+					"${representative}"
+				);
+				`
 			);
 
 			res.status(200).json(status);

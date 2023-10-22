@@ -10,15 +10,12 @@ import { getProfileId } from "@/app/utils/auth";
 import styles from "./index.module.scss";
 
 const Card = ({
-  id,
   title,
   description,
   company,
   salary,
-  working_hours,
-  active,
-  publish_date,
-  images,
+  workingHours,
+  publishDate,
   location,
   type,
 }: Advertisement) => {
@@ -32,7 +29,6 @@ const Card = ({
   const handlerRegister = async (data: any) => {
     const userId = getProfileId();
     if (!userId) {
-      console.log(data);
       const res = await fetch("http://localhost:8000/applications", {
         method: "POST",
         body: JSON.stringify(data),
@@ -45,9 +41,7 @@ const Card = ({
       setIsSubmitted(true);
       return;
     } else {
-      console.log("userId", userId);
       data.applicant = userId;
-      console.log(data);
       const res = await fetch("http://localhost:8000/applications", {
         method: "POST",
         body: JSON.stringify(data),
@@ -56,22 +50,19 @@ const Card = ({
         },
       });
       const json = await res.json();
-      console.log(json);
       setIsSubmitted(true);
     }
   };
 
-  // bg-base-200 or bg-slate-800 or bg-gray-800 or border border-white border-solid border-1
-
   return (
-    <div className="collapse  bg-gray-900  border border-white border-solid border-1">
+    <div className="bg-gray-900 border border-white border-solid collapse border-1">
       <input type="checkbox" className={styles.checkbox} />
-      <div className="collapse-title text-xl font-medium flex justify-between">
+      <div className="flex justify-between text-xl font-medium collapse-title">
         <div>
           <h4 className={styles.title}>{title}</h4>
           <p className={styles.description}>{shortDescription}...</p>
         </div>
-        <button className="cursor-pointer text-xs border-gray-50">
+        <button className="text-xs cursor-pointer border-gray-50">
           Click to
           <br />
           learn more
@@ -81,13 +72,12 @@ const Card = ({
         <div className={styles.collapseContent}>
           <div className={styles.collapseContentLeft}>
             <p className="w-11/12">{description}</p>
-            {/* <p>Company: {company}</p> */}
+            <p>Company: {company}</p>
             <p>Location: {location}</p>
             <p>Type: {type}</p>
-            <p>Working hours: {working_hours}</p>
-            <p>Salary: {salary}$</p>
-            {/* <p>{active}</p> */}
-            {/* <p>{publish_date}</p> */}
+            <p>Working hours: {workingHours}</p>
+            <p>Salary: {salary}$/h</p>
+            <p>Published on: {new Date(publishDate).toDateString()}</p>
           </div>
           <div className={styles.collapseContentRight}>
             <button
@@ -105,7 +95,7 @@ const Card = ({
             <div className={styles.container}>
               {isLoggedIn && !isSubmitted && (
                 <form
-                  className="form-control w-full max-w-xs"
+                  className="w-full max-w-xs form-control"
                   onSubmit={handleSubmit(handlerRegister)}
                 >
                   <div>
@@ -114,7 +104,7 @@ const Card = ({
                       type="text"
                       id="resume"
                       placeholder="Enter URL of your resume"
-                      className="input input-bordered w-full max-w-xs"
+                      className="w-full max-w-xs input input-bordered"
                       {...register("resume", { required: true })}
                     />
                   </div>
@@ -125,7 +115,7 @@ const Card = ({
                       type="textarea"
                       id="resume"
                       placeholder="Enter your motivation letter"
-                      className="input input-bordered w-full max-w-xs"
+                      className="w-full max-w-xs input input-bordered"
                       {...register("message", { required: true })}
                     />
                   </div>
@@ -144,7 +134,7 @@ const Card = ({
               {!isLoggedIn && !isSubmitted && (
                 <>
                   <form
-                    className="form-control w-full max-w-xs"
+                    className="w-full max-w-xs form-control"
                     onSubmit={handleSubmit(handlerRegister)}
                   >
                     <div>
@@ -153,7 +143,7 @@ const Card = ({
                         type="email"
                         id="email"
                         placeholder="Enter your email"
-                        className="input input-bordered w-full max-w-xs"
+                        className="w-full max-w-xs input input-bordered"
                         {...register("email", { required: true })}
                         required
                       />
@@ -164,7 +154,7 @@ const Card = ({
                         type="text"
                         id="resume"
                         placeholder="Enter URL of your resume"
-                        className="input input-bordered w-full max-w-xs"
+                        className="w-full max-w-xs input input-bordered"
                         {...register("resume", {
                           required: true,
                         })}
@@ -176,7 +166,7 @@ const Card = ({
                         type="textarea"
                         id="resume"
                         placeholder="Enter your motivation letter"
-                        className="input input-bordered w-full max-w-xs"
+                        className="w-full max-w-xs input input-bordered"
                         {...register("message", {
                           required: true,
                         })}
