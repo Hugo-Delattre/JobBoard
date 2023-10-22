@@ -10,17 +10,10 @@ export default (
 		try {
 			const [result] = await db.query(
 				`
-				SELECT a.*,
-				(
-					SELECT JSON_OBJECT(
-						'id', c.id,
-						'name', c.name,
-						'sector', c.sector
-					)
-					FROM advertisements ads
-					WHERE ads.id = a.advertisementId
-				) AS advertisement
+				SELECT *, a.id
 				FROM applications a
+				INNER JOIN advertisements ads
+				ON ads.id = a.advertisementId
 				WHERE a.id = ${id};
 				`
 			);

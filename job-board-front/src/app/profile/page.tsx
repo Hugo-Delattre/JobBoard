@@ -37,7 +37,6 @@ const ProfilePage = () => {
     fetch(`http://localhost:8000/users/${userId}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setUserData(data);
         setEditableUserData(data);
       })
@@ -60,8 +59,6 @@ const ProfilePage = () => {
             className="flex flex-col rounded"
             onSubmit={handleSubmit(async (data) => {
               try {
-                console.log("data", data);
-                console.log("userData", userData.data);
                 const res = await fetch(
                   `http://localhost:8000/users/${userData.data.id}`,
                   {
@@ -72,8 +69,6 @@ const ProfilePage = () => {
                     },
                   }
                 );
-                const json = await res.json;
-                console.log("json", json);
                 if (res.ok) {
                   setIsEditing(false);
                   console.log("user updated successfully");

@@ -4,7 +4,11 @@ const nextConfig = {
     serverActions: true
   },
   images: {
-    domains: ["cdn.discordapp.com", "avatars.githubusercontent.com"],
+    domains: [
+      "cdn.discordapp.com",
+      "avatars.githubusercontent.com",
+      "cloudflare-ipfs.com"
+    ],
   },
 };
 
