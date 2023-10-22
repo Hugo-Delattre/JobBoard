@@ -22,7 +22,6 @@ const LoginPage = () => {
       <form
         className="w-full max-w-xs form-control bg-slate-800"
         onSubmit={handleSubmit(async (data) => {
-          console.log(data);
           try {
             const res = await fetch("http://localhost:8000/auth/login", {
               method: "POST",

@@ -4,6 +4,7 @@ import Tabs from './Tabs'
 import { getTableData, getTables } from '@/lib/requests/dashboard'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
+import Head from 'next/head'
 
 type Props = {
   searchParams: Record<string, string>

@@ -20,10 +20,9 @@ const RegisterPage = () => {
   return (
     <div className={styles.container}>
       <form
-        className="form-control w-full max-w-xs bg-slate-800"
+        className="w-full max-w-xs form-control bg-slate-800"
         onSubmit={handleSubmit(async (data) => {
           try {
-            console.log(data);
             const res = await fetch("http://localhost:8000/users", {
               method: "POST",
               body: JSON.stringify(data),
@@ -32,7 +31,6 @@ const RegisterPage = () => {
               },
             });
             const json = await res.json();
-            console.log("json", json);
             if (res.ok) {
               router.push("/login");
             } else {
@@ -49,7 +47,7 @@ const RegisterPage = () => {
             type="email"
             id="email"
             autoComplete="email"
-            className="input input-bordered w-full max-w-xs"
+            className="w-full max-w-xs input input-bordered"
             {...register("email", { required: true, minLength: 5 })}
             required
           />
@@ -60,7 +58,7 @@ const RegisterPage = () => {
           <input
             type="firstName"
             id="firstName"
-            className="input input-bordered w-full max-w-xs"
+            className="w-full max-w-xs input input-bordered"
             {...register("firstName", { required: true })}
           />
         </div>
@@ -70,7 +68,7 @@ const RegisterPage = () => {
           <input
             type="lastName"
             id="lastName"
-            className="input input-bordered w-full max-w-xs"
+            className="w-full max-w-xs input input-bordered"
             {...register("lastName", { required: true })}
           />
         </div>
@@ -79,7 +77,7 @@ const RegisterPage = () => {
           <label htmlFor="role">Role</label>
           <select
             id="role"
-            className="input input-bordered w-full max-w-xs"
+            className="w-full max-w-xs input input-bordered"
             {...register("role", { required: true })}
             required
           >
@@ -95,7 +93,7 @@ const RegisterPage = () => {
             type="text"
             id="resume"
             placeholder="Enter URL of your resume"
-            className="input input-bordered w-full max-w-xs"
+            className="w-full max-w-xs input input-bordered"
             {...register("resume", { required: false })}
           />
         </div> */}
@@ -105,7 +103,7 @@ const RegisterPage = () => {
           <input
             type="password"
             id="password"
-            className="input input-bordered w-full max-w-xs"
+            className="w-full max-w-xs input input-bordered"
             autoComplete="current-password"
             {...register("password", { required: true })}
           />

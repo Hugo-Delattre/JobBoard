@@ -1,7 +1,6 @@
-export const getProfileId = () => { 
+export const getProfileId = () => {
   const id = localStorage.getItem('id');
-  console.log("id: ", id);
-  
+
   return id;
 }
 
